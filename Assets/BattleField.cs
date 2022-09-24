@@ -14,6 +14,7 @@ public class BattleField : MonoBehaviour
     {
         public Vector3 position;
         public GameObject unit;
+        public UnitStats unitStats;
     }
 
     public Cell[] playerCells;
@@ -43,6 +44,7 @@ public class BattleField : MonoBehaviour
             if (cells[i].unit == null)
             {
                 cells[i].unit = Instantiate(unit, cells[i].position, Quaternion.identity);
+                cells[i].unitStats = cells[i].unit.GetComponent<UnitStats>();
                 return true;
             }
         }

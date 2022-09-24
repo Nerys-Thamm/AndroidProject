@@ -37,6 +37,9 @@ public class Ability : ScriptableObject
     [SerializeField] private TargetType _target;
     public TargetType Target { get { return _target; } }
 
+    [SerializeField] private bool _isMagic;
+    public bool IsMagic { get { return _isMagic; } }
+
     [Flags]
     public enum EffectMask : byte
     {

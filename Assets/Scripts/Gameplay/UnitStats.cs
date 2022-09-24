@@ -11,6 +11,7 @@ public class UnitStats : MonoBehaviour
     {
         _unitData = unitData;
     }
+    public string Name { get { return _unitData.unitName; } }
 
     //Stats
     public int MaxHP { get { return _unitData.attributes.HP(_unitData.Level); } }

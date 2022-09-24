@@ -89,8 +89,38 @@ public class UnitData : ScriptableObject
             };
             return a;
         }
-
     }
+    [Header("Unit Stats")]
+    [SerializeField] private int _HP;
+    [SerializeField] private int _MP;
+    public int HP { get { return _HP; } }
+    public int MP { get { return _MP; } }
+
+    public void Damage(int dmg)
+    {
+        _HP -= dmg;
+        if (_HP < 0) _HP = 0;
+    }
+    public void Heal(int heal)
+    {
+        _HP += heal;
+        if (_HP > attributes.HP(_level)) _HP = attributes.HP(_level);
+    }
+    public bool UseMP(int mp)
+    {
+        if (_MP >= mp)
+        {
+            _MP -= mp;
+            return true;
+        }
+        return false;
+    }
+    public void RestoreMP(int mp)
+    {
+        _MP += mp;
+        if (_MP > attributes.MP(_level)) _MP = attributes.MP(_level);
+    }
+
     [Header("Unit Level")]
     [SerializeField] private int _level = 1;
     [SerializeField] private int _currXP = 0;

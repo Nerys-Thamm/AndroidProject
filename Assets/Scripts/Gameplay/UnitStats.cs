@@ -14,9 +14,9 @@ public class UnitStats : MonoBehaviour
 
     //Stats
     public int MaxHP { get { return _unitData.attributes.HP(_unitData.Level); } }
-    public int CurrHP { get; private set; }
+    public int CurrHP { get { return _unitData.HP; } }
     public int MaxMP { get { return _unitData.attributes.MP(_unitData.Level); } }
-    public int CurrMP { get; private set; }
+    public int CurrMP { get { return _unitData.MP; } }
     public int STR { get { return Mathf.CeilToInt(_unitData.attributes.STR(_unitData.Level) * _buffModTable[_buffModSTR + 2]); } }
     public int DEF { get { return Mathf.CeilToInt(_unitData.attributes.DEF(_unitData.Level) * _buffModTable[_buffModDEF + 2]); } }
     public int AGI { get { return Mathf.CeilToInt(_unitData.attributes.AGI(_unitData.Level) * _buffModTable[_buffModAGI + 2]); } }
@@ -40,26 +40,21 @@ public class UnitStats : MonoBehaviour
     //Combat Methods
     public void TakeDamage(int damage)
     {
-        CurrHP -= damage;
-        if (CurrHP < 0)
-            CurrHP = 0;
+        _unitData.Damage(damage);
     }
 
     public void Heal(int heal)
     {
-        CurrHP += heal;
-        if (CurrHP > MaxHP)
-            CurrHP = MaxHP;
+        _unitData.Heal(heal);
     }
 
     public bool UseMP(int mp)
     {
-        if (CurrMP >= mp)
-        {
-            CurrMP -= mp;
-            return true;
-        }
-        return false;
+        return _unitData.UseMP(mp);
+    }
+    public void RestoreMP(int mp)
+    {
+        _unitData.RestoreMP(mp);
     }
 
 

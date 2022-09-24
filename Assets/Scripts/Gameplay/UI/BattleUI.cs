@@ -39,6 +39,9 @@ public class BattleUI : MonoBehaviour
     [SerializeField] private Button _unitSelectButtonA, _unitSelectButtonB, _unitSelectButtonC;
     [SerializeField] private TMP_Text _allyNameTextA, _allyNameTextB, _allyNameTextC;
 
+    [Header("Action Menu")]
+    [SerializeField] private Button _attackButton, _abilityButton, _defendButton;
+
     [Header("Misc")]
     [SerializeField] private Animator _frontCamAnimator;
 
@@ -58,6 +61,9 @@ public class BattleUI : MonoBehaviour
         TargetSelect
     }
 
+    //--------------------------------------------------------------------------------
+    // Unit Select Menu
+    //
     private void HandleUnitSelectionButtonPress(int unitIndex)
     {
         SelectUnit(unitIndex);
@@ -113,6 +119,13 @@ public class BattleUI : MonoBehaviour
         _actionMenu.SetActive(false);
         _abilityMenu.SetActive(false);
     }
+    //----------------------------------------------------------------------
+
+
+
+    //----------------------------------------------------------------------
+    // Action Menu
+    //
 
     public void SelectActionMenu()
     {
@@ -123,6 +136,33 @@ public class BattleUI : MonoBehaviour
         _abilityMenu.SetActive(false);
     }
 
+    void OnAttackBtnClick()
+    {
+        DisableSelection();
+        _actionMenu.SetActive(false);
+        _mainMenu.SetActive(true);
+        _menuState = MenuState.Main;
+    }
+
+    void OnAbilityBtnClick()
+    {
+        _actionMenu.SetActive(false);
+        _abilityMenu.SetActive(true);
+        _menuState = MenuState.Ability;
+    }
+
+    void OnDefendBtnClick()
+    {
+        DisableSelection();
+        _actionMenu.SetActive(false);
+        _mainMenu.SetActive(true);
+        _menuState = MenuState.Main;
+    }
+    //----------------------------------------------------------------------
+
+    //----------------------------------------------------------------------
+    // Ability Menu
+    //
     public void SelectAbilityMenu()
     {
         _menuState = MenuState.Ability;
@@ -131,15 +171,28 @@ public class BattleUI : MonoBehaviour
         _actionMenu.SetActive(false);
         _abilityMenu.SetActive(true);
     }
+    //----------------------------------------------------------------------
 
     private MenuState _menuState = MenuState.Main;
 
     // Start is called before the first frame update
     void Start()
     {
+        //----------------------------------------------------------------------
+        // Setup Button Listeners
+        //
+
+        // Unit Select Button Listeners
         _unitSelectButtonA.onClick.AddListener(() => HandleUnitSelectionButtonPress(0));
         _unitSelectButtonB.onClick.AddListener(() => HandleUnitSelectionButtonPress(1));
         _unitSelectButtonC.onClick.AddListener(() => HandleUnitSelectionButtonPress(2));
+
+        // Action Menu Button Listeners
+        _attackButton.onClick.AddListener(OnAttackBtnClick);
+        _abilityButton.onClick.AddListener(OnAbilityBtnClick);
+        _defendButton.onClick.AddListener(OnDefendBtnClick);
+
+        //----------------------------------------------------------------------
     }
 
     // Update is called once per frame

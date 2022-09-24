@@ -32,8 +32,18 @@ public class UnitStats_Editor : Editor
 
         EditorGUILayout.Space();
 
+        //Current Stats
+        EditorGUILayout.LabelField("Current Stats", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("Current HP");
+        //Progress bar for HP
+        float hpPercent = (float)unitStats.CurrHP / (float)unitStats.MaxHP;
+        EditorGUI.ProgressBar(EditorGUILayout.GetControlRect(), hpPercent, unitStats.CurrHP.ToString() + "/" + unitStats.MaxHP.ToString());
+        EditorGUILayout.LabelField("Current MP");
+        //Progress bar for MP
+        float mpPercent = (float)unitStats.CurrMP / (float)unitStats.MaxMP;
+        EditorGUI.ProgressBar(EditorGUILayout.GetControlRect(), mpPercent, unitStats.CurrMP.ToString() + "/" + unitStats.MaxMP.ToString());
 
-
+        EditorGUILayout.Space();
 
         base.OnInspectorGUI();
     }

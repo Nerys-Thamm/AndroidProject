@@ -17,10 +17,12 @@ public class UnitStats : MonoBehaviour
     public int CurrHP { get; private set; }
     public int MaxMP { get { return _unitData.attributes.MP(_unitData.Level); } }
     public int CurrMP { get; private set; }
-    public int STR { get { return Mathf.CeilToInt(_unitData.attributes.STR(_unitData.Level) * _buffModTable[_buffModSTR]); } }
-    public int DEF { get { return Mathf.CeilToInt(_unitData.attributes.DEF(_unitData.Level) * _buffModTable[_buffModDEF]); } }
-    public int AGI { get { return Mathf.CeilToInt(_unitData.attributes.AGI(_unitData.Level) * _buffModTable[_buffModAGI]); } }
-    public int INT { get { return Mathf.CeilToInt(_unitData.attributes.INT(_unitData.Level) * _buffModTable[_buffModINT]); } }
+    public int STR { get { return Mathf.CeilToInt(_unitData.attributes.STR(_unitData.Level) * _buffModTable[_buffModSTR + 2]); } }
+    public int DEF { get { return Mathf.CeilToInt(_unitData.attributes.DEF(_unitData.Level) * _buffModTable[_buffModDEF + 2]); } }
+    public int AGI { get { return Mathf.CeilToInt(_unitData.attributes.AGI(_unitData.Level) * _buffModTable[_buffModAGI + 2]); } }
+    public int INT { get { return Mathf.CeilToInt(_unitData.attributes.INT(_unitData.Level) * _buffModTable[_buffModINT + 2]); } }
+
+    public int Level { get { return _unitData.Level; } }
 
     //Stat Modifiers (from equipment) (TODO)
 

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "UnitData", menuName = "UnitData", order = 0)]
+[CreateAssetMenu(fileName = "UnitData", menuName = "GameData/Unit/Create Unit Data", order = 0)]
 public class UnitData : ScriptableObject
 {
     [Header("Unit Info")]
@@ -155,6 +155,9 @@ public class UnitData : ScriptableObject
     {
         return Mathf.FloorToInt(firstLevelXP * Mathf.Pow(XPCurve, level - 1));
     }
+
+    [Header("Unit Skills")]
+    [SerializeField] private List<SkillData> _skills = new List<SkillData>();
 
 
 

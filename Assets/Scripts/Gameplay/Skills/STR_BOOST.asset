@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65e7506f1594c83de8afcdb08e7a76b6, type: 3}
+  m_Name: STR_BOOST
+  m_EditorClassIdentifier: 
+  _name: Str Boost
+  _description: Boosts physical attack power.
+  _skillPoints: 0
+  _abilityUnlocks: []
+  _statUnlocks:
+  - statPoints: 4
+    unlockRequirement: 2
+    statType: 2
+  - statPoints: 2
+    unlockRequirement: 5
+    statType: 0
+  - statPoints: 8
+    unlockRequirement: 5
+    statType: 2
+  - statPoints: 4
+    unlockRequirement: 9
+    statType: 0
+  - statPoints: 16
+    unlockRequirement: 15
+    statType: 2
+  - statPoints: 8
+    unlockRequirement: 21
+    statType: 0

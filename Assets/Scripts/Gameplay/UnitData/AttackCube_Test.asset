@@ -26,5 +26,10 @@ MonoBehaviour:
     _DEF_Growth: 3.2
     _AGI_Growth: 2.7
     _INT_Growth: 3.6
+  _HP: 7
+  _MP: 3
   _level: 1
   _currXP: 0
+  _skills:
+  - {fileID: 11400000, guid: f3362698a851178f4aa3010a8dc3e6a8, type: 2}
+  - {fileID: 11400000, guid: c3597c8bdef3327ec8a6f708befec47a, type: 2}

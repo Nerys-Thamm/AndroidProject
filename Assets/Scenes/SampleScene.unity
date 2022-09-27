@@ -3440,7 +3440,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 175723220}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1754042148}
+        m_TargetAssemblyTypeName: AudioController, Assembly-CSharp
+        m_MethodName: Play
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Select
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &175723220
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4197,6 +4209,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1754042148}
+        m_TargetAssemblyTypeName: AudioController, Assembly-CSharp
+        m_MethodName: Play
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Select
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &207980728
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4661,6 +4685,10 @@ MonoBehaviour:
   battleDirector: {fileID: 225145665}
   enemyData: {fileID: 11400000, guid: 5d02ed7963d248a80a99d0fc068fa958, type: 2}
   battleUI: {fileID: 1754042147}
+  damageEffect: {fileID: 0}
+  healEffect: {fileID: 0}
+  musicController: {fileID: 1450419808}
+  sfxController: {fileID: 609155643}
 --- !u!114 &225145665
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14462,6 +14490,209 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 597337a43c4b1664ea184cd26a5823d0, type: 3}
   m_PrefabInstance: {fileID: 603474075}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &609155642
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 609155644}
+  - component: {fileID: 609155643}
+  m_Layer: 0
+  m_Name: Sound FX
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &609155643
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 609155642}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a704b8d7ee8e177059c93ff44e3649be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  triggers: []
+  audioChannels:
+  - name: Magic
+    volume: 1
+    pitch: 1
+    clip: {fileID: 8300000, guid: 38816380e2b6238beaa1aca5020344f5, type: 3}
+    loop: 0
+    playOnAwake: 0
+    SpatialBlend: 0
+    maxDistance: 300
+    minDistance: 1
+    distanceCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: -1
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: -1
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    source: {fileID: 0}
+    playing: 0
+    paused: 0
+    time: 0
+    timeNormalized: 0
+    duration: 0
+  - name: Melee
+    volume: 1
+    pitch: 1
+    clip: {fileID: 8300000, guid: c757725cc70f57037a865bb2ad0ad6f8, type: 3}
+    loop: 0
+    playOnAwake: 0
+    SpatialBlend: 0
+    maxDistance: 300
+    minDistance: 1
+    distanceCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: -1
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: -1
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    source: {fileID: 0}
+    playing: 0
+    paused: 0
+    time: 0
+    timeNormalized: 0
+    duration: 0
+  - name: Damage
+    volume: 1
+    pitch: 1
+    clip: {fileID: 8300000, guid: 5d5100afe9ac3fb6095c5f5baf1637f3, type: 3}
+    loop: 0
+    playOnAwake: 0
+    SpatialBlend: 0
+    maxDistance: 300
+    minDistance: 1
+    distanceCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: -1
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: -1
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    source: {fileID: 0}
+    playing: 0
+    paused: 0
+    time: 0
+    timeNormalized: 0
+    duration: 0
+  - name: Death
+    volume: 1
+    pitch: 1
+    clip: {fileID: 8300000, guid: 9e2da37668f0cad4eb36821e3b8dd548, type: 3}
+    loop: 0
+    playOnAwake: 0
+    SpatialBlend: 0
+    maxDistance: 300
+    minDistance: 1
+    distanceCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: -1
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: -1
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    source: {fileID: 0}
+    playing: 0
+    paused: 0
+    time: 0
+    timeNormalized: 0
+    duration: 0
+  transitions: []
+--- !u!4 &609155644
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 609155642}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 82.60535, y: 187.37682, z: -35.608253}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 28
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &610411697
 GameObject:
   m_ObjectHideFlags: 0
@@ -24357,7 +24588,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1095507026}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1754042148}
+        m_TargetAssemblyTypeName: AudioController, Assembly-CSharp
+        m_MethodName: Play
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Select
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1095507026
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27552,6 +27795,18 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1754042148}
+        m_TargetAssemblyTypeName: AudioController, Assembly-CSharp
+        m_MethodName: Play
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Back
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1248646061
@@ -31772,6 +32027,149 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1449596003}
   m_CullTransparentMesh: 1
+--- !u!1 &1450419807
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1450419809}
+  - component: {fileID: 1450419808}
+  m_Layer: 0
+  m_Name: Music
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1450419808
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1450419807}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a704b8d7ee8e177059c93ff44e3649be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  triggers:
+  - Battle
+  - Action Select
+  audioChannels:
+  - name: Action Select
+    volume: 0.5
+    pitch: 1
+    clip: {fileID: 8300000, guid: 50fb30fc925159ffeb18a98af935966c, type: 3}
+    loop: 1
+    playOnAwake: 1
+    SpatialBlend: 0
+    maxDistance: 300
+    minDistance: 1
+    distanceCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: -1
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: -1
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    source: {fileID: 0}
+    playing: 0
+    paused: 0
+    time: 0
+    timeNormalized: 0
+    duration: 0
+  - name: Battle
+    volume: 0.5
+    pitch: 1
+    clip: {fileID: 8300000, guid: 2f8d742bc720ae54c8242145cdf77baf, type: 3}
+    loop: 1
+    playOnAwake: 0
+    SpatialBlend: 0
+    maxDistance: 300
+    minDistance: 1
+    distanceCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: -1
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: -1
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    source: {fileID: 0}
+    playing: 0
+    paused: 0
+    time: 0
+    timeNormalized: 0
+    duration: 0
+  transitions:
+  - from: Action Select
+    to: Battle
+    duration: 0.5
+    hasExitTime: 0
+    exitTime: 0
+    inheritNormalisedTime: 0
+    trigger: Battle
+    autoTransitionOnTrackEnd: 0
+  - from: Battle
+    to: Action Select
+    duration: 0.5
+    hasExitTime: 0
+    exitTime: 0
+    inheritNormalisedTime: 0
+    trigger: Action Select
+    autoTransitionOnTrackEnd: 0
+--- !u!4 &1450419809
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1450419807}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 82.60535, y: 187.37682, z: -35.608253}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 27
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1453591078
 GameObject:
   m_ObjectHideFlags: 0
@@ -34558,6 +34956,18 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1754042148}
+        m_TargetAssemblyTypeName: AudioController, Assembly-CSharp
+        m_MethodName: Play
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Select
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1601198247
@@ -37567,7 +37977,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1752264101}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1754042148}
+        m_TargetAssemblyTypeName: AudioController, Assembly-CSharp
+        m_MethodName: Play
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Select
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1752264101
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -37618,6 +38040,7 @@ GameObject:
   - component: {fileID: 1754042145}
   - component: {fileID: 1754042146}
   - component: {fileID: 1754042147}
+  - component: {fileID: 1754042148}
   m_Layer: 5
   m_Name: BattleUI
   m_TagString: Untagged
@@ -37730,6 +38153,99 @@ MonoBehaviour:
   _defendButton: {fileID: 2123586659}
   _abilityList: {fileID: 162833624}
   _frontCamAnimator: {fileID: 691281463}
+--- !u!114 &1754042148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1754042143}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a704b8d7ee8e177059c93ff44e3649be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  triggers: []
+  audioChannels:
+  - name: Back
+    volume: 1
+    pitch: 1
+    clip: {fileID: 8300000, guid: 2f2fdb75b631f5c8e9be697a616ba0cc, type: 3}
+    loop: 0
+    playOnAwake: 0
+    SpatialBlend: 0
+    maxDistance: 300
+    minDistance: 1
+    distanceCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: -1
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: -1
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    source: {fileID: 0}
+    playing: 0
+    paused: 0
+    time: 0
+    timeNormalized: 0
+    duration: 0
+  - name: Select
+    volume: 0.847
+    pitch: 1
+    clip: {fileID: 8300000, guid: 32856601d1507f55793a57d5b003f9ff, type: 3}
+    loop: 0
+    playOnAwake: 0
+    SpatialBlend: 0
+    maxDistance: 300
+    minDistance: 1
+    distanceCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: -1
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: -1
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    source: {fileID: 0}
+    playing: 0
+    paused: 0
+    time: 0
+    timeNormalized: 0
+    duration: 0
+  transitions: []
 --- !u!1 &1756569910
 GameObject:
   m_ObjectHideFlags: 0
@@ -39555,7 +40071,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1845677978}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1754042148}
+        m_TargetAssemblyTypeName: AudioController, Assembly-CSharp
+        m_MethodName: Play
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Select
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1845677978
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -44753,7 +45281,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2123586660}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1754042148}
+        m_TargetAssemblyTypeName: AudioController, Assembly-CSharp
+        m_MethodName: Play
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Select
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2123586660
 MonoBehaviour:
   m_ObjectHideFlags: 0

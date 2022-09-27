@@ -85,7 +85,7 @@ public class BattleDirector : MonoBehaviour
             OnTargetReached?.Invoke();
 
             // Wait for a bit
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(1.5f);
 
             // Point camera at nothing
             directedCam.m_Follow = defaultCamTarget;

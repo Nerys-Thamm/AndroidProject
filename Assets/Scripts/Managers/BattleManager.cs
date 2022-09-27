@@ -40,6 +40,15 @@ public class BattleManager : MonoBehaviour
     public EnemyData enemyData;
     public BattleUI battleUI;
 
+    /// <summary>
+    ///  Effects and Sounds
+    /// </summary>
+
+    public GameObject damageEffect;
+    public GameObject healEffect;
+    public AudioController musicController, sfxController;
+
+
     public struct BattleAction
     {
         public UnitStats unit;
@@ -65,6 +74,8 @@ public class BattleManager : MonoBehaviour
     bool currentlyBattling = false;
     bool win = false;
     bool readyForNextAction = false;
+
+    float earnedEXP = 0;
 
 
     // Start is called before the first frame update
@@ -173,6 +184,9 @@ public class BattleManager : MonoBehaviour
             PrepareRound();
             LoadNextAction();
             battleDirector.StartBattle(currentAction);
+            musicController.Stop("Battle");
+            musicController.Play("Battle");
+            musicController.Trigger("Battle");
         }
     }
 
@@ -255,6 +269,7 @@ public class BattleManager : MonoBehaviour
             case BattleAction.ActionType.Attack:
                 dmg = Utilities.CalcPhysDamage(currentAction.unit, currentAction.target);
                 currentAction.target.TakeDamage(dmg);
+                sfxController.Play("Melee");
                 //battleUI.ShowDamage(currentAction.targetIndex, currentAction.enemy, dmg);
                 break;
             case BattleAction.ActionType.Ability:
@@ -264,10 +279,12 @@ public class BattleManager : MonoBehaviour
                         if (currentAction.ability.IsMagic)
                         {
                             dmg = Mathf.FloorToInt(Utilities.CalcMagicDamage(currentAction.unit, currentAction.target) * currentAction.ability.EffectMult);
+                            sfxController.Play("Magic");
                         }
                         else
                         {
                             dmg = Mathf.FloorToInt(Utilities.CalcPhysDamage(currentAction.unit, currentAction.target) * currentAction.ability.EffectMult);
+                            sfxController.Play("Melee");
                         }
                         currentAction.target.TakeDamage(dmg);
                         //battleUI.ShowDamage(currentAction.targetIndex, currentAction.enemy, dmg);
@@ -283,6 +300,25 @@ public class BattleManager : MonoBehaviour
                 //currentAction.unit.isDefending = true;
                 break;
         }
+
+        //If current action deals damage, check for death
+        if (dmg > 0)
+        {
+            if (currentAction.target.CurrHP <= 0)
+            {
+                if (currentAction.enemy)
+                {
+                    //battleUI.ShowDeath(currentAction.targetIndex, currentAction.enemy);
+                }
+                else
+                {
+                    float xpVal = Mathf.Pow((currentAction.target.Level * 10f), 1.2f);
+                    xpVal += (xpVal / 10f * Random.Range(-1f, 1f));
+                    earnedEXP += xpVal;
+                    //battleUI.ShowDeath(currentAction.targetIndex, currentAction.enemy);
+                }
+            }
+        }
     }
 
     void EndRound()
@@ -290,6 +326,7 @@ public class BattleManager : MonoBehaviour
         currentlyBattling = false;
         //battleDirector.EndBattle();
         battleUI.ClearActions();
+        musicController.Trigger("Action Select");
         OnRoundEnd?.Invoke();
     }
 

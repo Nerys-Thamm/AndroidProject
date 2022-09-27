@@ -287,12 +287,21 @@ public class BattleManager : MonoBehaviour
                             sfxController.Play("Melee");
                         }
                         currentAction.target.TakeDamage(dmg);
+                        currentAction.target.ApplyDebuff(currentAction.ability.Effect);
                         //battleUI.ShowDamage(currentAction.targetIndex, currentAction.enemy, dmg);
                         break;
                     case Ability.AbilityType.Heal:
                         int heal = Mathf.FloorToInt(Utilities.CalcHeal(currentAction.unit) * currentAction.ability.EffectMult);
                         currentAction.target.Heal(heal);
                         //battleUI.ShowHeal(currentAction.targetIndex, currentAction.enemy, heal);
+                        break;
+                    case Ability.AbilityType.Buff:
+                        currentAction.target.ApplyBuff(currentAction.ability.Effect);
+                        //battleUI.ShowBuff(currentAction.targetIndex, currentAction.enemy);
+                        break;
+                    case Ability.AbilityType.Debuff:
+                        currentAction.target.ApplyDebuff(currentAction.ability.Effect);
+                        //battleUI.ShoowDebuff(currentAction.targetIndex, currentAction.enemy);
                         break;
                 }
                 break;

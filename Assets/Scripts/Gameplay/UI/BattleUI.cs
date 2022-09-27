@@ -134,6 +134,7 @@ public class BattleUI : MonoBehaviour
                     target = targetAllies ? _battleManager.battleField.playerCells[selectedTarget].unitStats : _battleManager.battleField.enemyCells[selectedTarget].unitStats
                 };
                 DisableSelection();
+                selectedAbility = null;
                 _menuState = MenuState.Main;
                 break;
         }
@@ -228,7 +229,7 @@ public class BattleUI : MonoBehaviour
             actionType = BattleManager.BattleAction.ActionType.Defend,
             ability = null,
             unit = _battleManager.battleField.playerCells[selectedUnit].unitStats,
-            target = null
+            target = _battleManager.battleField.playerCells[selectedUnit].unitStats
         };
         DisableSelection();
         _actionMenu.SetActive(false);

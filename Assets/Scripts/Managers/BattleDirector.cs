@@ -32,7 +32,7 @@ public class BattleDirector : MonoBehaviour
         directedCam.m_Follow = action.unit.transform;
         directedCam.m_LookAt = action.unit.transform;
         yield return new WaitForSeconds(2f);
-        if (action.actionType == BattleManager.BattleAction.ActionType.Attack || (action.actionType == BattleManager.BattleAction.ActionType.Ability && !action.ability.IsMagic))
+        if (action.actionType == BattleManager.BattleAction.ActionType.Attack || (action.actionType == BattleManager.BattleAction.ActionType.Ability && action.ability.Type == Ability.AbilityType.Attack))
         {
 
             float t = 0;
@@ -70,7 +70,7 @@ public class BattleDirector : MonoBehaviour
             directedCam.m_LookAt = action.unit.transform;
 
             // Wait for magic effect to finish
-            yield return new WaitForSeconds(1.5f);
+            yield return new WaitForSeconds(2.5f);
 
             // Destroy magic effect
             Destroy(magicEffect);

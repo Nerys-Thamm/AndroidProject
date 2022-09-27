@@ -57,6 +57,54 @@ public class UnitStats : MonoBehaviour
     {
         _unitData.RestoreMP(mp);
     }
+
+    public void ApplyBuff(Ability.EffectMask effect)
+    {
+        if ((effect & Ability.EffectMask.STR) != 0)
+        {
+            _buffModSTR++;
+            if (_buffModSTR > 2) _buffModSTR = 2;
+        }
+        if ((effect & Ability.EffectMask.DEF) != 0)
+        {
+            _buffModDEF++;
+            if (_buffModDEF > 2) _buffModDEF = 2;
+        }
+        if ((effect & Ability.EffectMask.AGI) != 0)
+        {
+            _buffModAGI++;
+            if (_buffModAGI > 2) _buffModAGI = 2;
+        }
+        if ((effect & Ability.EffectMask.INT) != 0)
+        {
+            _buffModINT++;
+            if (_buffModINT > 2) _buffModINT = 2;
+        }
+    }
+
+    public void ApplyDebuff(Ability.EffectMask effect)
+    {
+        if ((effect & Ability.EffectMask.STR) != 0)
+        {
+            _buffModSTR--;
+            if (_buffModSTR < -2) _buffModSTR = -2;
+        }
+        if ((effect & Ability.EffectMask.DEF) != 0)
+        {
+            _buffModDEF--;
+            if (_buffModDEF < -2) _buffModDEF = -2;
+        }
+        if ((effect & Ability.EffectMask.AGI) != 0)
+        {
+            _buffModAGI--;
+            if (_buffModAGI < -2) _buffModAGI = -2;
+        }
+        if ((effect & Ability.EffectMask.INT) != 0)
+        {
+            _buffModINT--;
+            if (_buffModINT < -2) _buffModINT = -2;
+        }
+    }
     public List<Ability> GetAbilities()
     {
         return _unitData.UnlockedAbilities();

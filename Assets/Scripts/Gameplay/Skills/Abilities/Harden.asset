@@ -18,4 +18,5 @@ MonoBehaviour:
   _effectMult: 1
   _type: 2
   _target: 2
+  _isMagic: 1
   _effectMask: 8

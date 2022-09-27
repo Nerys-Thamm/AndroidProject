@@ -53,6 +53,7 @@ public class Ability : ScriptableObject
     }
 
     [SerializeField] private EffectMask _effectMask;
+    public EffectMask Effect { get { return _effectMask; } }
 
 
 

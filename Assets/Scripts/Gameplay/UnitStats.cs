@@ -57,12 +57,17 @@ public class UnitStats : MonoBehaviour
     {
         _unitData.RestoreMP(mp);
     }
+    public List<Ability> GetAbilities()
+    {
+        return _unitData.UnlockedAbilities();
+    }
+
 
 
     // Start is called before the first frame update
     void Start()
     {
-
+        _unitData = ScriptableObject.Instantiate(_unitData);
     }
 
     // Update is called once per frame

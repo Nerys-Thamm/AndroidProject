@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _name: Cuboid
   _description: Abilities used by Cube type creatures.
-  _skillPoints: 0
+  _skillPoints: 100
   _abilityUnlocks:
   - ability: {fileID: 11400000, guid: 9a049c03070f5cc1392c401197e7714d, type: 2}
     unlockRequirement: 2

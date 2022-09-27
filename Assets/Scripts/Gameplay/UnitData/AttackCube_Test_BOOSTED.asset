@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4f965f0a762e71c13bd6f39a8f9b88b8, type: 3}
-  m_Name: AttackCube_Test
+  m_Name: AttackCube_Test_BOOSTED
   m_EditorClassIdentifier: 
   unitName: Attack Cube
   attributes:
@@ -26,9 +26,9 @@ MonoBehaviour:
     _DEF_Growth: 3.2
     _AGI_Growth: 2.7
     _INT_Growth: 3.6
-  _HP: 14
-  _MP: 7
-  _level: 4
+  _HP: 42
+  _MP: 25
+  _level: 15
   _currXP: 0
   _skills:
   - {fileID: 11400000, guid: f3362698a851178f4aa3010a8dc3e6a8, type: 2}

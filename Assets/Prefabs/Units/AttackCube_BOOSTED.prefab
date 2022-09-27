@@ -109,7 +109,7 @@ GameObject:
   - component: {fileID: 1300997407023671923}
   - component: {fileID: 7527703829187830703}
   m_Layer: 0
-  m_Name: AttackCube
+  m_Name: AttackCube_BOOSTED
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -163,7 +163,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7db3a726712ffb3c19b6aeb498bce1c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _unitData: {fileID: 11400000, guid: 0229f1177f7c92448ad7d4ca78de68ea, type: 2}
+  _unitData: {fileID: 11400000, guid: 8afe27fd10ba970809d8489012f6c72e, type: 2}
   _buffModSTR: 0
   _buffModDEF: 0
   _buffModAGI: 0

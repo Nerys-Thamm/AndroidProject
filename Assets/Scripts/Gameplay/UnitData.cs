@@ -159,6 +159,18 @@ public class UnitData : ScriptableObject
     [Header("Unit Skills")]
     [SerializeField] private List<SkillData> _skills = new List<SkillData>();
 
+    public List<SkillData> Skills { get { return _skills; } }
+
+    public List<Ability> UnlockedAbilities()
+    {
+        List<Ability> abilities = new List<Ability>();
+        foreach (SkillData skill in _skills)
+        {
+            abilities.AddRange(skill.GetUnlockedAbilities());
+        }
+        return abilities;
+    }
+
 
 
 }

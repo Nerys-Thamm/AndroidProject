@@ -15,6 +15,7 @@ public class BattleField : MonoBehaviour
         public Vector3 position;
         public GameObject unit;
         public UnitStats unitStats;
+        public bool isDefending;
     }
 
     public Cell[] playerCells;

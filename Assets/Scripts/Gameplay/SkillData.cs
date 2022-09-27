@@ -68,4 +68,17 @@ public class SkillData : ScriptableObject
         return unlocks;
     }
 
+    public List<Ability> GetUnlockedAbilities()
+    {
+        List<Ability> abilities = new List<Ability>();
+        foreach (AbilityUnlock a in _abilityUnlocks)
+        {
+            if (a.unlockRequirement <= _skillPoints)
+            {
+                abilities.Add(a.ability);
+            }
+        }
+        return abilities;
+    }
+
 }

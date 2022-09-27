@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _name: Str Boost
   _description: Boosts physical attack power.
-  _skillPoints: 0
+  _skillPoints: 100
   _abilityUnlocks: []
   _statUnlocks:
   - statPoints: 4

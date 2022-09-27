@@ -11,6 +11,45 @@ public class BattleUI : MonoBehaviour
     [Header("Selection")]
     int selectedUnitIndex = 0;
     bool selectingUnit = false;
+    BattleManager.BattleAction.ActionType selectedAction = BattleManager.BattleAction.ActionType.Attack;
+
+    [Header("Action Creation")]
+    int selectedUnit = 0;
+    int selectedTarget = 0;
+    Ability selectedAbility = null;
+    BattleManager.BattleAction[] _actions = new BattleManager.BattleAction[3];
+    public BattleManager.BattleAction[] Actions { get { return _actions; } }
+    public void ClearActions() { _actions = new BattleManager.BattleAction[3]; }
+
+    public string GetCurrentActionText(int index)
+    {
+        if (_actions[index].unit != null)
+        {
+            string actionText = "";
+            if (_actions[index].actionType == BattleManager.BattleAction.ActionType.Attack)
+            {
+                actionText = "Attack";
+                actionText += " --> " + _actions[index].target.Name;
+            }
+            else if (_actions[index].actionType == BattleManager.BattleAction.ActionType.Ability)
+            {
+                actionText = _actions[index].ability.Name;
+                actionText += " --> " + _actions[index].target.Name;
+            }
+            else if (_actions[index].actionType == BattleManager.BattleAction.ActionType.Defend)
+            {
+                actionText = "Defend";
+            }
+            return actionText;
+        }
+        else
+        {
+            return "None";
+        }
+
+
+    }
+
     [SerializeField] private GameObject _unitSelectIndicator1, _unitSelectIndicator2, _unitSelectIndicator3;
     private void SelectUnit(int index)
     {
@@ -42,6 +81,9 @@ public class BattleUI : MonoBehaviour
     [Header("Action Menu")]
     [SerializeField] private Button _attackButton, _abilityButton, _defendButton;
 
+    [Header("Ability Menu")]
+    [SerializeField] private AbilityList _abilityList;
+
     [Header("Misc")]
     [SerializeField] private Animator _frontCamAnimator;
 
@@ -66,17 +108,32 @@ public class BattleUI : MonoBehaviour
     //
     private void HandleUnitSelectionButtonPress(int unitIndex)
     {
-        SelectUnit(unitIndex);
+
         switch (_menuState)
         {
             case MenuState.UnitSelect:
+                SelectUnit(unitIndex);
                 _unitSelectMenu.SetActive(false);
+                selectedUnit = unitIndex;
                 _actionMenu.SetActive(true);
+                _actionMenu.GetComponent<ActionMenu>().SetCurrentActionText(GetCurrentActionText(unitIndex));
                 _menuState = MenuState.Action;
                 break;
             case MenuState.TargetSelect:
                 _abilityMenu.SetActive(false);
                 _mainMenu.SetActive(true);
+                selectedTarget = unitIndex;
+                bool targetAllies = (selectedAbility && (selectedAbility.Type == Ability.AbilityType.Heal || selectedAbility.Type == Ability.AbilityType.Buff));
+                _actions[selectedUnit] = new BattleManager.BattleAction
+                {
+                    unitIndex = selectedUnit,
+                    targetIndex = selectedTarget,
+                    actionType = selectedAction,
+                    ability = selectedAbility,
+                    unit = _battleManager.battleField.playerCells[selectedUnit].unitStats,
+                    target = targetAllies ? _battleManager.battleField.playerCells[selectedTarget].unitStats : _battleManager.battleField.enemyCells[selectedTarget].unitStats
+                };
+                DisableSelection();
                 _menuState = MenuState.Main;
                 break;
         }
@@ -94,6 +151,7 @@ public class BattleUI : MonoBehaviour
         _menuState = MenuState.TargetSelect;
         _frontCamAnimator.SetBool("ShowingAllies", false);
         _enemyNamePanel.SetActive(true);
+        _allyNamePanel.SetActive(false);
         _unitSelectMenu.SetActive(true);
         _unitInfoMenu.SetActive(false);
         _actionMenu.SetActive(false);
@@ -102,14 +160,22 @@ public class BattleUI : MonoBehaviour
 
     public void SelectAllyMenu()
     {
-        if (_menuState == MenuState.Main)
-        {
-            _menuState = MenuState.UnitSelect;
-        }
-        else
-        {
-            _menuState = MenuState.TargetSelect;
-        }
+        SetUnitSelectButtonsInteractable(_battleManager.CanSelectUnit(0, false), _battleManager.CanSelectUnit(1, false), _battleManager.CanSelectUnit(2, false));
+        _menuState = MenuState.TargetSelect;
+        _frontCamAnimator.SetBool("ShowingAllies", true);
+        _allyNamePanel.SetActive(true);
+        _enemyNamePanel.SetActive(false);
+        _unitSelectMenu.SetActive(true);
+        _unitInfoMenu.SetActive(false);
+        _actionMenu.SetActive(false);
+        _abilityMenu.SetActive(false);
+    }
+
+    public void SelectUnitMenu()
+    {
+
+        _menuState = MenuState.UnitSelect;
+
         SetUnitSelectButtonsInteractable(_battleManager.CanSelectUnit(0, false), _battleManager.CanSelectUnit(1, false), _battleManager.CanSelectUnit(2, false));
         _frontCamAnimator.SetBool("ShowingAllies", true);
         _enemyNamePanel.SetActive(false);
@@ -140,24 +206,37 @@ public class BattleUI : MonoBehaviour
     {
         DisableSelection();
         _actionMenu.SetActive(false);
-        _mainMenu.SetActive(true);
-        _menuState = MenuState.Main;
+        selectedAction = BattleManager.BattleAction.ActionType.Attack;
+        SelectEnemyMenu();
     }
 
     void OnAbilityBtnClick()
     {
         _actionMenu.SetActive(false);
         _abilityMenu.SetActive(true);
+        selectedAction = BattleManager.BattleAction.ActionType.Ability;
+        _abilityList.PopulateList(_battleManager.battleField.playerCells[selectedUnit].unitStats);
         _menuState = MenuState.Ability;
     }
 
     void OnDefendBtnClick()
     {
+        _actions[selectedUnit] = new BattleManager.BattleAction
+        {
+            unitIndex = selectedUnit,
+            targetIndex = 0,
+            actionType = BattleManager.BattleAction.ActionType.Defend,
+            ability = null,
+            unit = _battleManager.battleField.playerCells[selectedUnit].unitStats,
+            target = null
+        };
         DisableSelection();
         _actionMenu.SetActive(false);
         _mainMenu.SetActive(true);
         _menuState = MenuState.Main;
     }
+
+
     //----------------------------------------------------------------------
 
     //----------------------------------------------------------------------
@@ -166,11 +245,39 @@ public class BattleUI : MonoBehaviour
     public void SelectAbilityMenu()
     {
         _menuState = MenuState.Ability;
+        selectedAction = BattleManager.BattleAction.ActionType.Ability;
         _unitSelectMenu.SetActive(false);
         _unitInfoMenu.SetActive(false);
         _actionMenu.SetActive(false);
         _abilityMenu.SetActive(true);
     }
+
+    void RefreshAbilityMenu()
+    {
+        _abilityMenu.SetActive(false);
+        _abilityMenu.SetActive(true);
+    }
+
+    public void SelectAbility(Ability ability)
+    {
+        selectedAbility = ability;
+    }
+
+    public void ConfirmAbility()
+    {
+        _abilityMenu.SetActive(false);
+        _unitSelectMenu.SetActive(true);
+        if (selectedAbility.Type == Ability.AbilityType.Heal || selectedAbility.Type == Ability.AbilityType.Buff)
+        {
+            SelectAllyMenu();
+        }
+        else
+        {
+            SelectEnemyMenu();
+        }
+    }
+
+
     //----------------------------------------------------------------------
 
     private MenuState _menuState = MenuState.Main;

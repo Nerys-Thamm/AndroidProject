@@ -103,11 +103,11 @@ public class SaveSerialisation
     {
         get
         {
-            return saveData.PartyMonsterA.Deserialise();
+            return saveData.PartyMonsterA?.Deserialise();
         }
         set
         {
-            saveData.PartyMonsterA = new UnitData.SerializedUnitData(value);
+            saveData.PartyMonsterA = value != null ? new UnitData.SerializedUnitData(value) : null;
         }
     }
 
@@ -115,11 +115,11 @@ public class SaveSerialisation
     {
         get
         {
-            return saveData.PartyMonsterB.Deserialise();
+            return saveData.PartyMonsterB?.Deserialise();
         }
         set
         {
-            saveData.PartyMonsterB = new UnitData.SerializedUnitData(value);
+            saveData.PartyMonsterB = value != null ? new UnitData.SerializedUnitData(value) : null;
         }
     }
 
@@ -127,11 +127,11 @@ public class SaveSerialisation
     {
         get
         {
-            return saveData.PartyMonsterC.Deserialise();
+            return saveData.PartyMonsterC?.Deserialise();
         }
         set
         {
-            saveData.PartyMonsterC = new UnitData.SerializedUnitData(value);
+            saveData.PartyMonsterC = value != null ? new UnitData.SerializedUnitData(value) : null;
         }
     }
 

@@ -30106,7 +30106,7 @@ MonoBehaviour:
   playerUnits:
   - {fileID: 11400000, guid: 957eff514d745731e92d1059b254b49a, type: 2}
   - {fileID: 11400000, guid: 27018061303ef6380b9c310b2678a2cd, type: 2}
-  - {fileID: 11400000, guid: 27018061303ef6380b9c310b2678a2cd, type: 2}
+  - {fileID: 0}
 --- !u!4 &1313661532
 Transform:
   m_ObjectHideFlags: 0

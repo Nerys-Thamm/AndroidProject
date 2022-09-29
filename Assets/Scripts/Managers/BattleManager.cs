@@ -457,6 +457,7 @@ public class BattleManager : MonoBehaviour
         // Spawn the player units
         for (int i = 0; i < teamManager.playerUnits.Length; i++)
         {
+            if (teamManager.playerUnits[i] == null) continue;
             battleField.TrySpawnUnit(teamManager.playerUnits[i], ref battleField.playerCells);
             battleUI.CreateUnitInfoPanel(battleField.playerCells[i].unitStats);
         }
@@ -465,6 +466,7 @@ public class BattleManager : MonoBehaviour
         string[] playerNames = { "", "", "" };
         for (int i = 0; i < teamManager.playerUnits.Length; i++)
         {
+            if (battleField.playerCells[i].unitStats == null) continue;
             playerNames[i] = battleField.playerCells[i].unitStats.Name;
         }
         battleUI.SetAllyNames(playerNames);

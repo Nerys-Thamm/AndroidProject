@@ -29,6 +29,10 @@ public class UnitStats : MonoBehaviour
     public int INT { get { return Mathf.CeilToInt(_unitData.attributes.INT(_unitData.Level) * _buffModTable[_buffModINT + 2]); } }
 
     public int Level { get { return _unitData.Level; } }
+    public bool AddXP(int xp)
+    {
+        return _unitData.AddXP(xp);
+    }
 
     //Stat Modifiers (from equipment) (TODO)
 

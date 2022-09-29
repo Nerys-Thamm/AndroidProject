@@ -26,8 +26,9 @@ MonoBehaviour:
     _DEF_Growth: 3.2
     _AGI_Growth: 2.7
     _INT_Growth: 3.6
-  _HP: 25
-  _MP: 13
+  unitPrefab: {fileID: 1300997407023671934, guid: 8c4da787651c66862a228b7c47af3892, type: 3}
+  _HP: 45
+  _MP: 25
   _level: 15
   _currXP: 0
   _skills:

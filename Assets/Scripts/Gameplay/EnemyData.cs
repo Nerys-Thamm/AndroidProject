@@ -7,5 +7,5 @@ public class EnemyData : ScriptableObject
 {
     public int minLevel;
     public int maxLevel;
-    public List<GameObject> units = new List<GameObject>();
+    public List<UnitData> units = new List<UnitData>();
 }

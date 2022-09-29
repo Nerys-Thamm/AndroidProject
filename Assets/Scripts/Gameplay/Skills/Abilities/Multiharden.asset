@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b43c0faf8735163cba0778819c06b8de, type: 3}
   m_Name: Multiharden
   m_EditorClassIdentifier: 
-  _name: Multiharden
+  _abilityName: Multiharden
   _description: Slightly increases your teams' defense.
   _mpCost: 8
   _effectMult: 1
   _type: 2
   _target: 1
+  _isMagic: 0
   _effectMask: 8

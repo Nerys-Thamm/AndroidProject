@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b43c0faf8735163cba0778819c06b8de, type: 3}
   m_Name: Harden
   m_EditorClassIdentifier: 
-  _name: Harden
+  _abilityName: Harden
   _description: Slightly increases the creatures own defence.
   _mpCost: 2
   _effectMult: 1

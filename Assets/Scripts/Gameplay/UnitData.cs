@@ -10,6 +10,7 @@ public class UnitData : ScriptableObject
 
     [Header("Unit Attributes")]
     public Attributes attributes = new Attributes();
+
     [System.Serializable]
     /// <summary>
     ///  The Attributes of the unit, defined by their base amounts and stat growth.
@@ -180,6 +181,52 @@ public class UnitData : ScriptableObject
         _HP = attributes.HP(_level);
         _MP = attributes.MP(_level);
         _skills = new List<SkillData>(baseUnit._skills);
+    }
+
+    public UnitData()
+    { }
+
+    [System.Serializable]
+    public class SerializedUnitData
+    {
+        public string unitName;
+        public Attributes attributes;
+        public int level;
+        public int currXP;
+        public int currHP;
+        public int currMP;
+        public List<SkillData.SerializedSkillData> skills = new List<SkillData.SerializedSkillData>();
+
+        public SerializedUnitData(UnitData unit)
+        {
+            unitName = unit.unitName;
+            attributes = unit.attributes;
+            level = unit._level;
+            currXP = unit._currXP;
+            currHP = unit._HP;
+            currMP = unit._MP;
+
+            foreach (SkillData skill in unit._skills)
+            {
+                skills.Add(new SkillData.SerializedSkillData(skill));
+            }
+        }
+
+        public UnitData Deserialise()
+        {
+            UnitData unit = new UnitData();
+            unit.unitName = unitName;
+            unit.attributes = attributes;
+            unit._level = level;
+            unit._currXP = currXP;
+            unit._HP = currHP;
+            unit._MP = currMP;
+            foreach (SkillData.SerializedSkillData skill in skills)
+            {
+                unit._skills.Add(skill.GetSkillData());
+            }
+            return unit;
+        }
     }
 
 }

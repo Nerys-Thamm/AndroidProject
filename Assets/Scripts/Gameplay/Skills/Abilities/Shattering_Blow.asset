@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b43c0faf8735163cba0778819c06b8de, type: 3}
   m_Name: Shattering_Blow
   m_EditorClassIdentifier: 
-  _name: Shattering Blow
+  _abilityName: Shattering Blow
   _description: A mighty strike that shatters the enemies' defence.
   _mpCost: 4
   _effectMult: 1.2
   _type: 0
   _target: 0
+  _isMagic: 0
   _effectMask: 9

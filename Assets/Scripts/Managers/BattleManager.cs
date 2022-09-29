@@ -54,6 +54,8 @@ public class BattleManager : MonoBehaviour
     public BattleDirector battleDirector;
     public EnemyData enemyData;
     public BattleUI battleUI;
+    public WinLoseScreen winLoseScreen;
+    public GameObject gameOverScreen;
 
     /// <summary>
     ///  Effects and Sounds
@@ -253,13 +255,40 @@ public class BattleManager : MonoBehaviour
 
         if (lose)
         {
-            //battleUI.ShowLoseScreen();
-            //return;
+            gameOverScreen.SetActive(true);
+            winLoseScreen.Show(false);
+            winLoseScreen.AddReward("No EXP Gained.");
+            musicController.Trigger("GameOver");
+            teamManager.SaveMonsters();
+            return;
         }
         else if (win)
         {
-            //battleUI.ShowWinScreen();
-            //return;
+            gameOverScreen.SetActive(true);
+            winLoseScreen.Show(true);
+            musicController.Trigger("GameOver");
+
+            // Calculate EXP per unit
+            List<UnitStats> units = new List<UnitStats>();
+            for (int i = 0; i < battleField.playerCells.Length; i++)
+            {
+                if (battleField.playerCells[i].unitStats != null && battleField.playerCells[i].unitStats.CurrHP > 0)
+                {
+                    units.Add(battleField.playerCells[i].unitStats);
+                }
+            }
+            float expPerUnit = earnedEXP / units.Count;
+            for (int i = 0; i < units.Count; i++)
+            {
+                bool levelUp = units[i].AddXP(Mathf.FloorToInt(expPerUnit));
+                winLoseScreen.AddReward(units[i].Name + " gained " + expPerUnit + " EXP.");
+                if (levelUp)
+                {
+                    winLoseScreen.AddReward(units[i].Name + " leveled up!");
+                }
+            }
+            teamManager.SaveMonsters();
+            return;
         }
 
         ResortActions();

@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using Unity.VisualScripting;
+using System;
 
 [CreateAssetMenu(fileName = "New Skill", menuName = "GameData/Combat/Create Skill")]
 public class SkillData : ScriptableObject
@@ -18,8 +20,29 @@ public class SkillData : ScriptableObject
     [System.Serializable]
     public struct AbilityUnlock
     {
-        public Ability ability;
+        [SerializeField] public Ability ability;
         public int unlockRequirement;
+    }
+    [System.Serializable]
+    public struct SerializedAbilityUnlock
+    {
+        [SerializeField] public Ability.SerializedAbility ability;
+        public int unlockRequirement;
+
+        public SerializedAbilityUnlock(AbilityUnlock abilityUnlock)
+        {
+            ability = new Ability.SerializedAbility(abilityUnlock.ability);
+            unlockRequirement = abilityUnlock.unlockRequirement;
+        }
+
+        public AbilityUnlock Deserialize()
+        {
+            return new AbilityUnlock
+            {
+                ability = ability.GetAbility(),
+                unlockRequirement = unlockRequirement
+            };
+        }
     }
     [System.Serializable]
     public struct StatUnlock
@@ -79,6 +102,44 @@ public class SkillData : ScriptableObject
             }
         }
         return abilities;
+    }
+
+    [System.Serializable]
+    public class SerializedSkillData
+    {
+        public string name;
+        public string description;
+        public int skillPoints;
+        public List<SerializedAbilityUnlock> abilityUnlocks;
+        public List<StatUnlock> statUnlocks;
+
+        public SerializedSkillData(SkillData skillData)
+        {
+            name = skillData._name;
+            description = skillData._description;
+            skillPoints = skillData._skillPoints;
+            statUnlocks = skillData._statUnlocks;
+            abilityUnlocks = new List<SerializedAbilityUnlock>();
+            foreach (AbilityUnlock a in skillData._abilityUnlocks)
+            {
+                abilityUnlocks.Add(new SerializedAbilityUnlock(a));
+            }
+        }
+
+        public SkillData GetSkillData()
+        {
+            SkillData skillData = ScriptableObject.CreateInstance<SkillData>();
+            skillData._name = name;
+            skillData._description = description;
+            skillData._skillPoints = skillPoints;
+            skillData._statUnlocks = statUnlocks;
+            skillData._abilityUnlocks = new List<AbilityUnlock>();
+            foreach (SerializedAbilityUnlock a in abilityUnlocks)
+            {
+                skillData._abilityUnlocks.Add(a.Deserialize());
+            }
+            return skillData;
+        }
     }
 
 }

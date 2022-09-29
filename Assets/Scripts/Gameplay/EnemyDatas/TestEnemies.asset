@@ -15,4 +15,4 @@ MonoBehaviour:
   minLevel: 13
   maxLevel: 17
   units:
-  - {fileID: 1300997407023671934, guid: 8c4da787651c66862a228b7c47af3892, type: 3}
+  - {fileID: 11400000, guid: 62410b130625a96f0857ea943658ce4c, type: 2}

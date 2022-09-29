@@ -12,6 +12,11 @@ public class BattleManager : MonoBehaviour
         {
             int dmg = Mathf.FloorToInt(attacker.STR * 0.5f - defender.DEF * 0.25f);
             dmg = dmg + Random.Range(-dmg / 8, dmg / 8);
+            //If damage is 0 or smaller, set it to 0 or 1 randomly
+            if (dmg <= 0)
+            {
+                dmg = Random.Range(0, 2);
+            }
             return dmg;
         }
 
@@ -19,6 +24,11 @@ public class BattleManager : MonoBehaviour
         {
             int dmg = Mathf.FloorToInt(attacker.INT * 0.5f - defender.DEF * 0.15f);
             dmg = dmg + Random.Range(-dmg / 8, dmg / 8);
+            //If damage is 0 or smaller, set it to 0 or 1 randomly
+            if (dmg <= 0)
+            {
+                dmg = Random.Range(0, 2);
+            }
             return dmg;
         }
 
@@ -26,6 +36,11 @@ public class BattleManager : MonoBehaviour
         {
             int heal = Mathf.FloorToInt(healer.INT * 0.5f);
             heal = heal + Random.Range(-heal / 8, heal / 8);
+            //If heal is 0 or smaller, set it to 0 or 1 randomly
+            if (heal <= 0)
+            {
+                heal = Random.Range(0, 2);
+            }
             return heal;
         }
     }
@@ -44,8 +59,8 @@ public class BattleManager : MonoBehaviour
     ///  Effects and Sounds
     /// </summary>
 
-    public GameObject damageEffect;
-    public GameObject healEffect;
+    public GameObject hitEffect;
+    public GameObject deathEffect;
     public AudioController musicController, sfxController;
 
 
@@ -183,9 +198,8 @@ public class BattleManager : MonoBehaviour
             currentlyBattling = true;
             PrepareRound();
             LoadNextAction();
+            battleUI.SetMainMenuActive(false);
             battleDirector.StartBattle(currentAction);
-            musicController.Stop("Battle");
-            musicController.Play("Battle");
             musicController.Trigger("Battle");
         }
     }
@@ -264,15 +278,21 @@ public class BattleManager : MonoBehaviour
     void ApplyCurrentAction()
     {
         int dmg = 0;
+        GameObject hitEffectInstance = null;
+        HitScore hitScore = null;
         switch (currentAction.actionType)
         {
             case BattleAction.ActionType.Attack:
                 dmg = Utilities.CalcPhysDamage(currentAction.unit, currentAction.target);
                 currentAction.target.TakeDamage(dmg);
                 sfxController.Play("Melee");
-                //battleUI.ShowDamage(currentAction.targetIndex, currentAction.enemy, dmg);
+                hitEffectInstance = Instantiate(hitEffect, currentAction.target.transform.position, Quaternion.identity);
+                hitScore = hitEffectInstance.GetComponent<HitScore>();
+                hitScore.SetText(dmg.ToString());
+                hitScore.SetType(HitScore.Type.Damage);
                 break;
             case BattleAction.ActionType.Ability:
+                currentAction.unit.UseMP(currentAction.ability.MPCost);
                 switch (currentAction.ability.Type)
                 {
                     case Ability.AbilityType.Attack:
@@ -287,22 +307,54 @@ public class BattleManager : MonoBehaviour
                             sfxController.Play("Melee");
                         }
                         currentAction.target.TakeDamage(dmg);
+                        hitEffectInstance = Instantiate(hitEffect, currentAction.target.transform.position, Quaternion.identity);
+                        hitScore = hitEffectInstance.GetComponent<HitScore>();
+                        hitScore.SetText(dmg.ToString());
+                        hitScore.SetType(HitScore.Type.Damage);
                         currentAction.target.ApplyDebuff(currentAction.ability.Effect);
-                        //battleUI.ShowDamage(currentAction.targetIndex, currentAction.enemy, dmg);
                         break;
                     case Ability.AbilityType.Heal:
                         int heal = Mathf.FloorToInt(Utilities.CalcHeal(currentAction.unit) * currentAction.ability.EffectMult);
                         currentAction.target.Heal(heal);
-                        //battleUI.ShowHeal(currentAction.targetIndex, currentAction.enemy, heal);
+                        hitEffectInstance = Instantiate(hitEffect, currentAction.target.transform.position, Quaternion.identity);
+                        hitScore = hitEffectInstance.GetComponent<HitScore>();
+                        hitScore.SetText(heal.ToString());
+                        hitScore.SetType(HitScore.Type.Heal);
                         break;
                     case Ability.AbilityType.Buff:
                         currentAction.target.ApplyBuff(currentAction.ability.Effect);
-                        //battleUI.ShowBuff(currentAction.targetIndex, currentAction.enemy);
                         break;
                     case Ability.AbilityType.Debuff:
                         currentAction.target.ApplyDebuff(currentAction.ability.Effect);
-                        //battleUI.ShoowDebuff(currentAction.targetIndex, currentAction.enemy);
                         break;
+                }
+                if ((currentAction.ability.Effect & Ability.EffectMask.AGI) != 0)
+                {
+                    hitEffectInstance = Instantiate(hitEffect, currentAction.target.transform.position, Quaternion.identity);
+                    hitScore = hitEffectInstance.GetComponent<HitScore>();
+                    hitScore.SetText("AGI");
+                    hitScore.SetType(currentAction.ability.Type == Ability.AbilityType.Buff ? HitScore.Type.Buff : HitScore.Type.Debuff);
+                }
+                if ((currentAction.ability.Effect & Ability.EffectMask.STR) != 0)
+                {
+                    hitEffectInstance = Instantiate(hitEffect, currentAction.target.transform.position, Quaternion.identity);
+                    hitScore = hitEffectInstance.GetComponent<HitScore>();
+                    hitScore.SetText("STR");
+                    hitScore.SetType(currentAction.ability.Type == Ability.AbilityType.Buff ? HitScore.Type.Buff : HitScore.Type.Debuff);
+                }
+                if ((currentAction.ability.Effect & Ability.EffectMask.INT) != 0)
+                {
+                    hitEffectInstance = Instantiate(hitEffect, currentAction.target.transform.position, Quaternion.identity);
+                    hitScore = hitEffectInstance.GetComponent<HitScore>();
+                    hitScore.SetText("INT");
+                    hitScore.SetType(currentAction.ability.Type == Ability.AbilityType.Buff ? HitScore.Type.Buff : HitScore.Type.Debuff);
+                }
+                if ((currentAction.ability.Effect & Ability.EffectMask.DEF) != 0)
+                {
+                    hitEffectInstance = Instantiate(hitEffect, currentAction.target.transform.position, Quaternion.identity);
+                    hitScore = hitEffectInstance.GetComponent<HitScore>();
+                    hitScore.SetText("DEF");
+                    hitScore.SetType(currentAction.ability.Type == Ability.AbilityType.Buff ? HitScore.Type.Buff : HitScore.Type.Debuff);
                 }
                 break;
             case BattleAction.ActionType.Defend:
@@ -317,6 +369,8 @@ public class BattleManager : MonoBehaviour
             {
                 if (currentAction.enemy)
                 {
+                    StartCoroutine(DeathAnimation(currentAction.target.gameObject));
+                    battleUI.SetDead(currentAction.targetIndex, false);
                     //battleUI.ShowDeath(currentAction.targetIndex, currentAction.enemy);
                 }
                 else
@@ -324,10 +378,37 @@ public class BattleManager : MonoBehaviour
                     float xpVal = Mathf.Pow((currentAction.target.Level * 10f), 1.2f);
                     xpVal += (xpVal / 10f * Random.Range(-1f, 1f));
                     earnedEXP += xpVal;
+                    StartCoroutine(DeathAnimation(currentAction.target.gameObject));
+                    battleUI.SetDead(currentAction.targetIndex, true);
                     //battleUI.ShowDeath(currentAction.targetIndex, currentAction.enemy);
                 }
             }
         }
+    }
+
+    IEnumerator DeathAnimation(GameObject unit)
+    {
+        //Place a death effect on the unit, then fade out all materials over time before destroying the death effect and unit
+        GameObject deathEffectInstance = Instantiate(deathEffect, unit.transform.position, Quaternion.identity);
+
+        //Fade out all materials
+        Renderer[] renderers = unit.GetComponentsInChildren<Renderer>();
+        foreach (Renderer r in renderers)
+        {
+            foreach (Material m in r.materials)
+            {
+                Color c = m.color;
+                while (c.a > 0)
+                {
+                    c.a -= Time.deltaTime / 2.0f;
+                    m.color = c;
+                    yield return null;
+                }
+            }
+        }
+
+        Destroy(deathEffectInstance);
+        Destroy(unit, 5f);
     }
 
     void EndRound()
@@ -335,6 +416,7 @@ public class BattleManager : MonoBehaviour
         currentlyBattling = false;
         //battleDirector.EndBattle();
         battleUI.ClearActions();
+        battleUI.SetMainMenuActive(true);
         musicController.Trigger("Action Select");
         OnRoundEnd?.Invoke();
     }
@@ -347,7 +429,16 @@ public class BattleManager : MonoBehaviour
         for (int i = 0; i < teamManager.playerUnits.Length; i++)
         {
             battleField.TrySpawnUnit(teamManager.playerUnits[i], ref battleField.playerCells);
+            battleUI.CreateUnitInfoPanel(battleField.playerCells[i].unitStats);
         }
+
+        // Set the player unit names
+        string[] playerNames = { "", "", "" };
+        for (int i = 0; i < teamManager.playerUnits.Length; i++)
+        {
+            playerNames[i] = battleField.playerCells[i].unitStats.Name;
+        }
+        battleUI.SetAllyNames(playerNames);
 
         // Decide how many enemies to spawn between 1 and 3
         int enemyCount = Random.Range(1, 4);
@@ -356,6 +447,7 @@ public class BattleManager : MonoBehaviour
             // Decide which enemy to spawn
             int enemyIndex = Random.Range(0, enemyData.units.Count);
             battleField.TrySpawnUnit(enemyData.units[enemyIndex], ref battleField.enemyCells);
+            battleField.enemyCells[i].unitStats.SetNewUnitData(Random.Range(enemyData.minLevel, enemyData.maxLevel));
         }
 
         // Apply animation offsets

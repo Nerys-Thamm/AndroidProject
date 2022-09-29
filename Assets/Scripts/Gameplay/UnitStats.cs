@@ -11,6 +11,11 @@ public class UnitStats : MonoBehaviour
     {
         _unitData = unitData;
     }
+
+    public void SetNewUnitData(int level)
+    {
+        _unitData = new UnitData(_unitData, level);
+    }
     public string Name { get { return _unitData.unitName; } }
 
     //Stats
@@ -115,7 +120,6 @@ public class UnitStats : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _unitData = ScriptableObject.Instantiate(_unitData);
     }
 
     // Update is called once per frame

@@ -77,6 +77,7 @@ public class BattleUI : MonoBehaviour
     [SerializeField] private GameObject _unitSelectMenu, _unitInfoMenu, _actionMenu, _abilityMenu, _mainMenu;
     [SerializeField] private Button _unitSelectButtonA, _unitSelectButtonB, _unitSelectButtonC;
     [SerializeField] private TMP_Text _allyNameTextA, _allyNameTextB, _allyNameTextC;
+    [SerializeField] private GameObject _unitPanelPrefab;
 
     [Header("Action Menu")]
     [SerializeField] private Button _attackButton, _abilityButton, _defendButton;
@@ -93,6 +94,53 @@ public class BattleUI : MonoBehaviour
         _enemyNameTextB.text = names[1];
         _enemyNameTextC.text = names[2];
     }
+    public void SetDead(int index, bool enemy)
+    {
+        if (enemy)
+        {
+            if (index == 0)
+            {
+                _enemyNameTextA.text += " (Dead)";
+            }
+            else if (index == 1)
+            {
+                _enemyNameTextB.text += " (Dead)";
+            }
+            else if (index == 2)
+            {
+                _enemyNameTextC.text += " (Dead)";
+            }
+        }
+        else
+        {
+            if (index == 0)
+            {
+                _allyNameTextA.text += " (Dead)";
+            }
+            else if (index == 1)
+            {
+                _allyNameTextB.text += " (Dead)";
+            }
+            else if (index == 2)
+            {
+                _allyNameTextC.text += " (Dead)";
+            }
+        }
+
+    }
+
+    public void SetAllyNames(string[] names)
+    {
+        _allyNameTextA.text = names[0];
+        _allyNameTextB.text = names[1];
+        _allyNameTextC.text = names[2];
+    }
+
+    public void CreateUnitInfoPanel(UnitStats unit)
+    {
+        GameObject panel = Instantiate(_unitPanelPrefab, _unitInfoMenu.transform);
+        panel.GetComponent<UnitPanel>().unitStats = unit;
+    }
 
     enum MenuState
     {
@@ -101,6 +149,15 @@ public class BattleUI : MonoBehaviour
         Action,
         Ability,
         TargetSelect
+    }
+
+    ///-------------------------------------------------------------------------------
+    /// Main Menu
+    /// 
+
+    public void SetMainMenuActive(bool active)
+    {
+        _mainMenu.SetActive(active);
     }
 
     //--------------------------------------------------------------------------------
@@ -135,6 +192,7 @@ public class BattleUI : MonoBehaviour
                 };
                 DisableSelection();
                 selectedAbility = null;
+                _unitSelectMenu.SetActive(false);
                 _menuState = MenuState.Main;
                 break;
         }
@@ -154,7 +212,6 @@ public class BattleUI : MonoBehaviour
         _enemyNamePanel.SetActive(true);
         _allyNamePanel.SetActive(false);
         _unitSelectMenu.SetActive(true);
-        _unitInfoMenu.SetActive(false);
         _actionMenu.SetActive(false);
         _abilityMenu.SetActive(false);
     }
@@ -167,7 +224,6 @@ public class BattleUI : MonoBehaviour
         _allyNamePanel.SetActive(true);
         _enemyNamePanel.SetActive(false);
         _unitSelectMenu.SetActive(true);
-        _unitInfoMenu.SetActive(false);
         _actionMenu.SetActive(false);
         _abilityMenu.SetActive(false);
     }
@@ -198,7 +254,6 @@ public class BattleUI : MonoBehaviour
     {
         _menuState = MenuState.Action;
         _unitSelectMenu.SetActive(false);
-        _unitInfoMenu.SetActive(false);
         _actionMenu.SetActive(true);
         _abilityMenu.SetActive(false);
     }
@@ -215,6 +270,7 @@ public class BattleUI : MonoBehaviour
     {
         _actionMenu.SetActive(false);
         _abilityMenu.SetActive(true);
+        _unitSelectMenu.SetActive(false);
         selectedAction = BattleManager.BattleAction.ActionType.Ability;
         _abilityList.PopulateList(_battleManager.battleField.playerCells[selectedUnit].unitStats);
         _menuState = MenuState.Ability;
@@ -248,7 +304,6 @@ public class BattleUI : MonoBehaviour
         _menuState = MenuState.Ability;
         selectedAction = BattleManager.BattleAction.ActionType.Ability;
         _unitSelectMenu.SetActive(false);
-        _unitInfoMenu.SetActive(false);
         _actionMenu.SetActive(false);
         _abilityMenu.SetActive(true);
     }

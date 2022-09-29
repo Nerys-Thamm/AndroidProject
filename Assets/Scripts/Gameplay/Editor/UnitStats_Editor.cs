@@ -15,7 +15,7 @@ public class UnitStats_Editor : Editor
 
 
         EditorGUILayout.LabelField("Unit Info", EditorStyles.boldLabel);
-        EditorGUILayout.LabelField("Unit Name", unitStats.name);
+        EditorGUILayout.LabelField("Unit Name", unitStats.Name);
         EditorGUILayout.LabelField("Unit Level", unitStats.Level.ToString());
 
         //Data

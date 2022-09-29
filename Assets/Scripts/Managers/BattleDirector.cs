@@ -16,6 +16,7 @@ public class BattleDirector : MonoBehaviour
 
     public void StartBattle(BattleManager.BattleAction action)
     {
+        StopAllCoroutines();
         StartCoroutine(PlayAction(action));
     }
 
@@ -59,8 +60,9 @@ public class BattleDirector : MonoBehaviour
                 action.unit.transform.rotation = Quaternion.Lerp(targetRot, unitInitRot, t);
                 yield return null;
             }
-            directedCam.m_Follow = defaultCamTarget;
-            directedCam.m_LookAt = defaultCamTarget;
+
+            yield return new WaitForSeconds(1f);
+
         }
         else
         {
@@ -85,14 +87,13 @@ public class BattleDirector : MonoBehaviour
             OnTargetReached?.Invoke();
 
             // Wait for a bit
-            yield return new WaitForSeconds(1.5f);
+            yield return new WaitForSeconds(2.5f);
 
-            // Point camera at nothing
-            directedCam.m_Follow = defaultCamTarget;
-            directedCam.m_LookAt = defaultCamTarget;
         }
         directedCam.m_Priority = 1;
         yield return new WaitForSeconds(0.5f);
+        directedCam.m_Follow = defaultCamTarget;
+        directedCam.m_LookAt = defaultCamTarget;
         OnAnimationComplete?.Invoke();
 
     }

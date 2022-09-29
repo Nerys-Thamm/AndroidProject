@@ -171,6 +171,15 @@ public class UnitData : ScriptableObject
         return abilities;
     }
 
-
+    ///Constructor
+    public UnitData(UnitData baseUnit, int level)
+    {
+        unitName = baseUnit.unitName;
+        attributes = baseUnit.attributes;
+        _level = level;
+        _HP = attributes.HP(_level);
+        _MP = attributes.MP(_level);
+        _skills = new List<SkillData>(baseUnit._skills);
+    }
 
 }

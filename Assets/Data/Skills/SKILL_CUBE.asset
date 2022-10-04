@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65e7506f1594c83de8afcdb08e7a76b6, type: 3}
+  m_Name: SKILL_CUBE
+  m_EditorClassIdentifier: 
+  _name: Cuboid
+  _description: Abilities used by Cube type creatures.
+  _skillPoints: 0
+  _abilityUnlocks:
+  - ability: {fileID: 11400000, guid: 9a049c03070f5cc1392c401197e7714d, type: 2}
+    unlockRequirement: 2
+  - ability: {fileID: 11400000, guid: 8bb37587c087beee6a74a5e095526d9b, type: 2}
+    unlockRequirement: 10
+  - ability: {fileID: 11400000, guid: d0bc82f3c9fd52e9aa8b23bbe1ccf72f, type: 2}
+    unlockRequirement: 26
+  - ability: {fileID: 11400000, guid: 81ab6d23884bf5eedb7121c78d56569e, type: 2}
+    unlockRequirement: 52
+  _statUnlocks:
+  - statPoints: 4
+    unlockRequirement: 6
+    statType: 1
+  - statPoints: 8
+    unlockRequirement: 17
+    statType: 1
+  - statPoints: 16
+    unlockRequirement: 39
+    statType: 1

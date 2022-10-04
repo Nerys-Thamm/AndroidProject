@@ -61,8 +61,17 @@ public class SkillData : ScriptableObject
 
     [Header("Skill Tree")]
     [SerializeField] private int _skillPoints;
+    public int SkillPoints { get { return _skillPoints; } }
     [SerializeField] private List<AbilityUnlock> _abilityUnlocks;
     [SerializeField] private List<StatUnlock> _statUnlocks;
+    public void InvestPoints(int points)
+    {
+        _skillPoints += points;
+    }
+    public void ResetPoints()
+    {
+        _skillPoints = 0;
+    }
 
 
     [System.Serializable]

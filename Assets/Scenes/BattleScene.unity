@@ -3366,6 +3366,7 @@ GameObject:
   - component: {fileID: 175723221}
   - component: {fileID: 175723220}
   - component: {fileID: 175723219}
+  - component: {fileID: 175723222}
   m_Layer: 5
   m_Name: FleeBtn
   m_TagString: Untagged
@@ -3438,16 +3439,16 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1754042148}
-        m_TargetAssemblyTypeName: AudioController, Assembly-CSharp
-        m_MethodName: Play
+      - m_Target: {fileID: 175723222}
+        m_TargetAssemblyTypeName: SceneLoader, Assembly-CSharp
+        m_MethodName: LoadScene
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: Select
+          m_StringArgument: MenuScene
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &175723220
@@ -3488,6 +3489,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 175723217}
   m_CullTransparentMesh: 1
+--- !u!114 &175723222
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 175723217}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e4c3ff811c38504480bf0c5b67b6c19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &185347272
 GameObject:
   m_ObjectHideFlags: 0
@@ -4680,7 +4693,7 @@ MonoBehaviour:
   battleField: {fileID: 1739633834}
   teamManager: {fileID: 1313661531}
   battleDirector: {fileID: 225145665}
-  enemyData: {fileID: 11400000, guid: 5d02ed7963d248a80a99d0fc068fa958, type: 2}
+  enemyData: {fileID: 11400000, guid: 61de7deafc6666de8b308ba97a3290f2, type: 2}
   battleUI: {fileID: 1754042147}
   winLoseScreen: {fileID: 1294829813}
   gameOverScreen: {fileID: 1294829809}
@@ -30107,6 +30120,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 957eff514d745731e92d1059b254b49a, type: 2}
   - {fileID: 11400000, guid: 27018061303ef6380b9c310b2678a2cd, type: 2}
   - {fileID: 0}
+  starterUnits:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!4 &1313661532
 Transform:
   m_ObjectHideFlags: 0
@@ -38481,7 +38498,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26d9955fca3bdafbcb80fd2cf7cfe428, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitPrefab: {fileID: 1300997407023671934, guid: 8c4da787651c66862a228b7c47af3892, type: 3}
+  speciesData: {fileID: 11400000, guid: 61de7deafc6666de8b308ba97a3290f2, type: 2}
   offset: {x: -2.22, y: 0, z: -3.55}
   cellRadius: 1.12
   teamDistance: 6.41
@@ -46812,6 +46829,7 @@ GameObject:
   - component: {fileID: 2146287679}
   - component: {fileID: 2146287678}
   - component: {fileID: 2146287677}
+  - component: {fileID: 2146287680}
   m_Layer: 5
   m_Name: MainMenu
   m_TagString: Untagged
@@ -46883,7 +46901,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2146287678}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2146287680}
+        m_TargetAssemblyTypeName: SceneLoader, Assembly-CSharp
+        m_MethodName: LoadScene
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: MenuScene
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2146287678
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -46922,6 +46952,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2146287675}
   m_CullTransparentMesh: 1
+--- !u!114 &2146287680
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2146287675}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e4c3ff811c38504480bf0c5b67b6c19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &777987497342297872
 PrefabInstance:
   m_ObjectHideFlags: 0

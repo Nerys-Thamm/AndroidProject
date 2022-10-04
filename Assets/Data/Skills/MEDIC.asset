@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65e7506f1594c83de8afcdb08e7a76b6, type: 3}
+  m_Name: MEDIC
+  m_EditorClassIdentifier: 
+  _name: Medic
+  _description: Spells to heal and buff allies
+  _skillPoints: 0
+  _abilityUnlocks:
+  - ability: {fileID: 11400000, guid: 4eee57e53c79bfcc5bebd9a760a85235, type: 2}
+    unlockRequirement: 4
+  - ability: {fileID: 11400000, guid: a0743fd4baad80df898d0bd1ebe1a147, type: 2}
+    unlockRequirement: 16
+  _statUnlocks:
+  - statPoints: 2
+    unlockRequirement: 2
+    statType: 5
+  - statPoints: 4
+    unlockRequirement: 6
+    statType: 1
+  - statPoints: 6
+    unlockRequirement: 10
+    statType: 5
+  - statPoints: 8
+    unlockRequirement: 20
+    statType: 1

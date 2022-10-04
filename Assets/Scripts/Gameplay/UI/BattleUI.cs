@@ -172,7 +172,7 @@ public class BattleUI : MonoBehaviour
                 SelectUnit(unitIndex);
                 _unitSelectMenu.SetActive(false);
                 selectedUnit = unitIndex;
-                _actionMenu.SetActive(true);
+                SelectActionMenu();
                 _actionMenu.GetComponent<ActionMenu>().SetCurrentActionText(GetCurrentActionText(unitIndex));
                 _menuState = MenuState.Action;
                 break;
@@ -256,6 +256,15 @@ public class BattleUI : MonoBehaviour
         _unitSelectMenu.SetActive(false);
         _actionMenu.SetActive(true);
         _abilityMenu.SetActive(false);
+        //Check if unit has any abilities
+        if (_battleManager.battleField.playerCells[selectedUnit].unitStats.GetAbilities().Count > 0)
+        {
+            _abilityButton.interactable = true;
+        }
+        else
+        {
+            _abilityButton.interactable = false;
+        }
     }
 
     void OnAttackBtnClick()

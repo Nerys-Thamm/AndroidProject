@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BattleField : MonoBehaviour
 {
-    public GameObject unitPrefab;
+    public SpeciesData speciesData;
     public Vector3 offset;
 
     public float cellRadius;
@@ -45,9 +45,25 @@ public class BattleField : MonoBehaviour
         {
             if (cells[i].unit == null)
             {
-                cells[i].unit = Instantiate(unitPrefab, cells[i].position, Quaternion.identity);
+                cells[i].unit = Instantiate(speciesData.GetSpecies(unit.unitSpecies).prefab, cells[i].position, Quaternion.identity);
                 cells[i].unitStats = cells[i].unit.GetComponent<UnitStats>();
                 cells[i].unitStats.SetUnitData(unit);
+
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public bool TrySpawnUnit(UnitData unit, ref Cell[] cells, int level)
+    {
+        for (int i = 0; i < cells.Length; i++)
+        {
+            if (cells[i].unit == null)
+            {
+                cells[i].unit = Instantiate(speciesData.GetSpecies(unit.unitSpecies).prefab, cells[i].position, Quaternion.identity);
+                cells[i].unitStats = cells[i].unit.GetComponent<UnitStats>();
+                cells[i].unitStats.SetNewUnitData(unit, level);
 
                 return true;
             }

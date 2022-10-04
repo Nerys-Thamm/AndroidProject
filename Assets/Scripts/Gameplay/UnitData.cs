@@ -7,6 +7,9 @@ public class UnitData : ScriptableObject
 {
     [Header("Unit Info")]
     public string unitName;
+    public string unitSpecies;
+    [SerializeField] string _unitID = "";
+    public string UnitID { get { if (_unitID == "") _unitID = System.Guid.NewGuid().ToString(); return _unitID; } private set { _unitID = value; } }
 
     [Header("Unit Attributes")]
     public Attributes attributes = new Attributes();
@@ -133,7 +136,13 @@ public class UnitData : ScriptableObject
         if (_currXP + xp >= NextLevelXP(_level))
         {
             _level++;
+            _skillPoints += SPgain(_level);
             _currXP += xp;
+            while (_currXP >= NextLevelXP(_level))
+            {
+                _level++;
+                _skillPoints += SPgain(_level);
+            }
             return true;
         }
         else
@@ -156,11 +165,71 @@ public class UnitData : ScriptableObject
     {
         return Mathf.FloorToInt(firstLevelXP * Mathf.Pow(XPCurve, level - 1));
     }
+    public static int SPgain(int level)
+    {
+        if (level % 2 != 0)
+        {
+            return 0;
+        }
+
+        // Lvl 1 - 12 : 3sp
+        // Lvl 13 - 21 : 4sp
+        // Lvl 22 - 30 : 5sp
+        // Lvl 31 - 39 : 6sp
+        // Lvl 40 - 42 : 5sp
+        // Lvl 43 - 45 : 4sp
+        // Lvl 46 - 48 : 3sp
+        // Lvl 49+ : 2sp
+
+        if (level <= 12)
+        {
+            return 3;
+        }
+        else if (level <= 21)
+        {
+            return 4;
+        }
+        else if (level <= 30)
+        {
+            return 5;
+        }
+        else if (level <= 39)
+        {
+            return 6;
+        }
+        else if (level <= 42)
+        {
+            return 5;
+        }
+        else if (level <= 45)
+        {
+            return 4;
+        }
+        else if (level <= 48)
+        {
+            return 3;
+        }
+        else
+        {
+            return 2;
+        }
+    }
 
     [Header("Unit Skills")]
     [SerializeField] private List<SkillData> _skills = new List<SkillData>();
-
+    [SerializeField] private int _skillPoints = 0;
     public List<SkillData> Skills { get { return _skills; } }
+    public int SkillPoints { get { return _skillPoints; } }
+    public bool InvestSkillPoints(int skillIndex, int points)
+    {
+        if (points <= _skillPoints)
+        {
+            _skills[skillIndex].InvestPoints(points);
+            _skillPoints -= points;
+            return true;
+        }
+        return false;
+    }
 
     public List<Ability> UnlockedAbilities()
     {
@@ -173,38 +242,59 @@ public class UnitData : ScriptableObject
     }
 
     ///Constructor
-    public UnitData(UnitData baseUnit, int level)
+    public UnitData(UnitData from, int level)
     {
-        unitName = baseUnit.unitName;
-        attributes = baseUnit.attributes;
+        unitName = from.unitName;
+        unitSpecies = from.unitSpecies;
+        UnitID = System.Guid.NewGuid().ToString();
+        attributes = from.attributes;
         _level = level;
+        _currXP = NextLevelXP(_level - 1);
         _HP = attributes.HP(_level);
         _MP = attributes.MP(_level);
-        _skills = new List<SkillData>(baseUnit._skills);
+        _skills = new List<SkillData>(from._skills);
+        _skillPoints = 0;
+        foreach (SkillData skill in _skills)
+        {
+            skill.ResetPoints();
+        }
+    }
+
+    public static UnitData CreateFromBase(UnitData baseUnit)
+    {
+        return new UnitData(baseUnit, 1);
     }
 
     public UnitData()
-    { }
+    {
+        UnitID = System.Guid.NewGuid().ToString();
+    }
 
     [System.Serializable]
     public class SerializedUnitData
     {
         public string unitName;
+        public string unitSpecies;
+        public string unitID;
         public Attributes attributes;
         public int level;
         public int currXP;
         public int currHP;
         public int currMP;
+        public int skillPoints;
         public List<SkillData.SerializedSkillData> skills = new List<SkillData.SerializedSkillData>();
 
         public SerializedUnitData(UnitData unit)
         {
             unitName = unit.unitName;
+            unitSpecies = unit.unitSpecies;
+            unitID = unit.UnitID;
             attributes = unit.attributes;
             level = unit._level;
             currXP = unit._currXP;
             currHP = unit._HP;
             currMP = unit._MP;
+            skillPoints = unit._skillPoints;
 
             foreach (SkillData skill in unit._skills)
             {
@@ -216,11 +306,14 @@ public class UnitData : ScriptableObject
         {
             UnitData unit = new UnitData();
             unit.unitName = unitName;
+            unit.unitSpecies = unitSpecies;
+            unit.UnitID = unitID;
             unit.attributes = attributes;
             unit._level = level;
             unit._currXP = currXP;
             unit._HP = currHP;
             unit._MP = currMP;
+            unit._skillPoints = skillPoints;
             foreach (SkillData.SerializedSkillData skill in skills)
             {
                 unit._skills.Add(skill.GetSkillData());
@@ -228,5 +321,7 @@ public class UnitData : ScriptableObject
             return unit;
         }
     }
+
+
 
 }

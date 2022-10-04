@@ -64,6 +64,10 @@ public class SaveSerialisation
         else // If no save file exists, create a new one
         {
             saveData = new SaveData();
+            saveData.playerCreatureStorage = new List<UnitData.SerializedUnitData>();
+            saveData.PartyMonsterA = null;
+            saveData.PartyMonsterB = null;
+            saveData.PartyMonsterC = null;
             Save();
         }
     }
@@ -81,6 +85,10 @@ public class SaveSerialisation
     {
         get
         {
+            if (saveData.playerCreatureStorage == null)
+            {
+                saveData.playerCreatureStorage = new List<UnitData.SerializedUnitData>();
+            }
             List<UnitData> playerCreatureStorage = new List<UnitData>();
             foreach (UnitData.SerializedUnitData serializedUnitData in saveData.playerCreatureStorage)
             {

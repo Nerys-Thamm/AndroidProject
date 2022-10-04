@@ -22,4 +22,21 @@ public class UnitData_Editor : Editor
         EditorGUILayout.LabelField("AGI", unitData.attributes.AGI(unitData.Level).ToString());
         EditorGUILayout.LabelField("INT", unitData.attributes.INT(unitData.Level).ToString());
     }
+
+    [MenuItem("CONTEXT/Create/UnitData")]
+    public void CreateFromBase(MenuCommand command)
+    {
+        UnitData unitData = (UnitData)command.context;
+
+        // Create a new instance of the base unit
+        UnitData newUnit = UnitData.CreateFromBase(unitData);
+
+        // Set the name of the new unit
+        newUnit.unitName = "New " + newUnit.unitSpecies;
+
+        // Save the new unit as a new asset in the project
+        AssetDatabase.CreateAsset(newUnit, "Assets/Units/" + newUnit.unitName + ".asset");
+        AssetDatabase.SaveAssets();
+
+    }
 }

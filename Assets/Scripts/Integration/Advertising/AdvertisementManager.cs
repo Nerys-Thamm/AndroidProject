@@ -126,6 +126,7 @@ public class AdvertisementManager : MonoBehaviour, IUnityAdsLoadListener, IUnity
     public void OnUnityAdsShowComplete(string adUnitId, UnityAdsShowCompletionState showCompletionState)
     {
         Debug.Log($"Ad Unit {adUnitId} completed with state: {showCompletionState.ToString()}");
+        OnAdComplete?.Invoke();
     }
 
     void IUnityAdsInitializationListener.OnInitializationComplete()
@@ -137,4 +138,6 @@ public class AdvertisementManager : MonoBehaviour, IUnityAdsLoadListener, IUnity
     {
         Debug.Log($"Unity Ads initialization failed: {error.ToString()} - {message}");
     }
+
+    public System.Action OnAdComplete;
 }

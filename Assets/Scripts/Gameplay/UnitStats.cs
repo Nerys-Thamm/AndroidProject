@@ -12,9 +12,9 @@ public class UnitStats : MonoBehaviour
         _unitData = unitData;
     }
 
-    public void SetNewUnitData(int level)
+    public void SetNewUnitData(UnitData data, int level)
     {
-        _unitData = new UnitData(_unitData, level);
+        _unitData = new UnitData(data, level);
     }
     public string Name { get { return _unitData.unitName; } }
 

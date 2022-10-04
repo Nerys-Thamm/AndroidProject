@@ -52,7 +52,7 @@ public class BattleManager : MonoBehaviour
     public BattleField battleField;
     public TeamManager teamManager;
     public BattleDirector battleDirector;
-    public EnemyData enemyData;
+    public SpeciesData enemyData;
     public BattleUI battleUI;
     public WinLoseScreen winLoseScreen;
     public GameObject gameOverScreen;
@@ -280,12 +280,19 @@ public class BattleManager : MonoBehaviour
             float expPerUnit = earnedEXP / units.Count;
             for (int i = 0; i < units.Count; i++)
             {
-                bool levelUp = units[i].AddXP(Mathf.FloorToInt(expPerUnit));
-                winLoseScreen.AddReward(units[i].Name + " gained " + expPerUnit + " EXP.");
+                bool levelUp = units[i].AddXP(Mathf.CeilToInt(expPerUnit));
+                winLoseScreen.AddReward(units[i].Name + " gained " + Mathf.CeilToInt(expPerUnit) + " EXP.");
                 if (levelUp)
                 {
                     winLoseScreen.AddReward(units[i].Name + " leveled up!");
                 }
+            }
+            int currLevel = PlayerPrefs.GetInt("CurrLevel", 1);
+            int highestLevel = PlayerPrefs.GetInt("HighestCompletedLevel", 1);
+            if (currLevel >= highestLevel)
+            {
+                PlayerPrefs.SetInt("HighestCompletedLevel", currLevel);
+                PlayerPrefs.Save();
             }
             teamManager.SaveMonsters();
             return;
@@ -404,7 +411,7 @@ public class BattleManager : MonoBehaviour
                 }
                 else
                 {
-                    float xpVal = Mathf.Pow((currentAction.target.Level * 10f), 1.2f);
+                    float xpVal = Mathf.Pow((currentAction.target.Level * 2f), 1.2f);
                     xpVal += (xpVal / 10f * Random.Range(-1f, 1f));
                     earnedEXP += xpVal;
                     StartCoroutine(DeathAnimation(currentAction.target.gameObject));
@@ -458,6 +465,8 @@ public class BattleManager : MonoBehaviour
         for (int i = 0; i < teamManager.playerUnits.Length; i++)
         {
             if (teamManager.playerUnits[i] == null) continue;
+            teamManager.playerUnits[i].Heal(9999999);
+            teamManager.playerUnits[i].RestoreMP(9999999);
             battleField.TrySpawnUnit(teamManager.playerUnits[i], ref battleField.playerCells);
             battleUI.CreateUnitInfoPanel(battleField.playerCells[i].unitStats);
         }
@@ -471,30 +480,37 @@ public class BattleManager : MonoBehaviour
         }
         battleUI.SetAllyNames(playerNames);
 
+        //Get Enemy Level Range
+        int midLevel = PlayerPrefs.GetInt("CurrLevel", 1) * PlayerPrefs.GetInt("LevelInterval", 1);
+        Debug.Log("Mid Level: " + midLevel);
+        int minLevel = midLevel - 2;
+        int maxLevel = midLevel;
+        if (minLevel < 1) minLevel = 1;
+
         // Decide how many enemies to spawn between 1 and 3
         int enemyCount = Random.Range(1, 4);
         for (int i = 0; i < enemyCount; i++)
         {
             // Decide which enemy to spawn
-            int enemyIndex = Random.Range(0, enemyData.units.Count);
-            battleField.TrySpawnUnit(enemyData.units[enemyIndex], ref battleField.enemyCells);
-            battleField.enemyCells[i].unitStats.SetNewUnitData(Random.Range(enemyData.minLevel, enemyData.maxLevel));
+            int enemyIndex = Random.Range(0, enemyData.speciesList.Count);
+            battleField.TrySpawnUnit(enemyData.speciesList[enemyIndex].baseUnit, ref battleField.enemyCells, Random.Range(minLevel, maxLevel));
+            Debug.Log("Spawning " + battleField.enemyCells[i].unitStats.Name + " at level " + battleField.enemyCells[i].unitStats.Level);
         }
 
         // Apply animation offsets
         for (int i = 0; i < battleField.playerCells.Length; i++)
         {
-            if (battleField.playerCells[i].unit != null)
+            if (battleField.playerCells[i].unit != null && battleField.playerCells[i].unit.GetComponent<Animator>())
             {
-                battleField.playerCells[i].unit.GetComponent<Animator>().SetFloat("Offset", i / 3f);
+                battleField.playerCells[i].unit.GetComponent<Animator>()?.SetFloat("Offset", i / 3f);
             }
         }
 
         for (int i = 0; i < battleField.enemyCells.Length; i++)
         {
-            if (battleField.enemyCells[i].unit != null)
+            if (battleField.enemyCells[i].unit != null && battleField.enemyCells[i].unit.GetComponent<Animator>())
             {
-                battleField.enemyCells[i].unit.GetComponent<Animator>().SetFloat("Offset", i / 3f);
+                battleField.enemyCells[i].unit.GetComponent<Animator>()?.SetFloat("Offset", i / 3f);
             }
         }
 

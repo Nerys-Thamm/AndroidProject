@@ -4,19 +4,25 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+/// <summary>
+///  Class for displaying a hit effect.
+/// </summary>
 public class HitScore : MonoBehaviour
 {
-    public Texture dmgTex, healTex, buffTex, debuffTex;
-    public Color dmgColor, healColor, buffColor, debuffColor;
-    public float lifetime = 1f;
-    public AnimationCurve scaleCurve, alphaCurve;
-    public float spawnHeight = 1f;
-    public float spawnHeightJitter = 0.5f;
-    public float spawnHorizontalJitter = 0.5f;
+    public Texture dmgTex, healTex, buffTex, debuffTex; // Textures for the different hit effects
+    public Color dmgColor, healColor, buffColor, debuffColor; // Colors for the different hit effects
+    public float lifetime = 1f; // How long the hit effect should last
+    public AnimationCurve scaleCurve, alphaCurve; // Animation curves for the hit effect
+    public float spawnHeight = 1f; // How high the hit effect should spawn
+    public float spawnHeightJitter = 0.5f; // How much the hit effect should jitter
+    public float spawnHorizontalJitter = 0.5f;  // How much the hit effect should jitter
 
     [SerializeField] RawImage image;
     [SerializeField] TMP_Text text;
 
+    /// <summary>
+    ///  The type of hit effect.
+    /// </summary>
     public enum Type
     {
         Damage,
@@ -34,17 +40,19 @@ public class HitScore : MonoBehaviour
         StartCoroutine(Animate());
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
+    /// <summary>
+    ///  Sets the hit effect's text.
+    /// </summary>
+    /// <param name="text"></param>
     public void SetText(string text)
     {
         this.text.text = text;
     }
 
+    /// <summary>
+    ///  Sets the hit effect's type.
+    /// </summary>
+    /// <param name="type"></param>
     public void SetType(Type type)
     {
         switch (type)
@@ -68,6 +76,10 @@ public class HitScore : MonoBehaviour
         }
     }
 
+    /// <summary>
+    ///  Animates the hit effect.
+    /// </summary>
+    /// <returns></returns>
     IEnumerator Animate()
     {
         float t = 0f;

@@ -5,6 +5,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+/// <summary>
+///  Shows a list of abilities.
+/// </summary>
 public class AbilityList : MonoBehaviour
 {
     [SerializeField] BattleUI _battleUI;
@@ -16,6 +19,10 @@ public class AbilityList : MonoBehaviour
     [SerializeField] Button selectButton;
     List<Button> buttons = new List<Button>();
 
+    /// <summary>
+    /// Populates the list.
+    /// </summary>
+    /// <param name="unit"></param>
     public void PopulateList(UnitStats unit)
     {
         float height = 0;
@@ -24,7 +31,7 @@ public class AbilityList : MonoBehaviour
             Destroy(button.gameObject);
         }
         buttons.Clear();
-        List<Ability> abilities = unit.GetAbilities();
+        List<Ability> abilities = unit.GetAbilities(); // Get the unit's abilities.
 
         foreach (Ability ability in abilities)
         {
@@ -39,6 +46,11 @@ public class AbilityList : MonoBehaviour
         listContent.sizeDelta = new Vector2(listContent.sizeDelta.x, height);
     }
 
+    /// <summary>
+    ///  Updates the description field.
+    /// </summary>
+    /// <param name="ability"></param>
+    /// <param name="unit"></param>
     void UpdateDescriptionField(Ability ability, UnitStats unit)
     {
         abilityDescription.text = ability.Description;
@@ -53,9 +65,4 @@ public class AbilityList : MonoBehaviour
         selectButton.onClick.AddListener(() => _battleUI.ConfirmAbility());
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 }

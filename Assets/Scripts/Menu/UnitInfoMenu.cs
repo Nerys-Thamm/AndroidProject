@@ -23,7 +23,10 @@ public class UnitInfoMenu : MonoBehaviour
     public TMP_Text unitSkills;
     public TMP_Text unitUnassignedSP;
 
-
+    /// <summary>
+    ///  Set the unit info menu to display the given unit.
+    /// </summary>
+    /// <param name="unit"></param>
     public void SetUnitInfo(UnitData unit)
     {
         unitName.text = unit.unitName;
@@ -42,18 +45,6 @@ public class UnitInfoMenu : MonoBehaviour
             unitSkills.text += skill.Name + "\n";
         }
         unitEXP.text = "EXP: " + unit.CurrXP.ToString() + "/" + UnitData.NextLevelXP(unit.Level).ToString();
-
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
 
     }
 }

@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+/// <summary>
+/// A panel showing details of a unit.
+/// </summary>
 public class UnitPanel : MonoBehaviour
 {
     public UnitStats unitStats;
@@ -13,11 +16,6 @@ public class UnitPanel : MonoBehaviour
     [SerializeField] Image hpBar;
     [SerializeField] Image mpBar;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
 
     // Update is called once per frame
     void Update()

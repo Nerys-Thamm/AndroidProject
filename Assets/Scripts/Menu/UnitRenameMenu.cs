@@ -4,12 +4,20 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+/// <summary>
+/// The menu for renaming monsters.
+/// </summary>
 public class UnitRenameMenu : MonoBehaviour
 {
     public TMP_InputField unitName;
     public Button confirmButton;
     public Button cancelButton;
 
+    /// <summary>
+    ///  Rename a unit, and return the new name in a callback.
+    /// </summary>
+    /// <param name="currName"></param>
+    /// <param name="callback"></param>
     public void RenameUnit(string currName, System.Action<string> callback)
     {
         unitName.text = currName;
@@ -19,15 +27,4 @@ public class UnitRenameMenu : MonoBehaviour
         cancelButton.onClick.AddListener(() => { gameObject.SetActive(false); });
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 }

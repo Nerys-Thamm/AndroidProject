@@ -4,6 +4,9 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
+/// <summary>
+/// UI Displaying the win and lose result, as well as rewards.
+/// </summary>
 public class WinLoseScreen : MonoBehaviour
 {
     public TMP_Text winLoseText;
@@ -13,6 +16,10 @@ public class WinLoseScreen : MonoBehaviour
     public string winText, loseText;
     string rewardsString = "";
 
+    /// <summary>
+    ///  Sets the win/lose text and rewards.
+    /// </summary>
+    /// <param name="win"></param>
     public void Show(bool win)
     {
         winLoseText.text = win ? winText : loseText;
@@ -20,16 +27,15 @@ public class WinLoseScreen : MonoBehaviour
         //menuButton.onClick.AddListener(() => GameManager.Instance.LoadMenu());
     }
 
+    /// <summary>
+    ///  Adds a reward to the rewards string.
+    /// </summary>
+    /// <param name="reward"></param>
     public void AddReward(string reward)
     {
         rewardsString += reward + "\n";
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
 
     // Update is called once per frame
     void Update()

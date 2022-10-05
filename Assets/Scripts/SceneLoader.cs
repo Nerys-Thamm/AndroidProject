@@ -2,23 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Handles loading of scenes
+/// </summary>
 public class SceneLoader : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
+    /// <summary>
+    ///  Load a scene by name.
+    /// </summary>
+    /// <param name="sceneName"></param>
     public void LoadScene(string sceneName)
     {
-        if (PlayerPrefs.GetInt("AdsDisabled", 0) == 0 && FindObjectOfType<AdvertisementManager>() != null)
+        if (PlayerPrefs.GetInt("AdsDisabled", 0) == 0 && FindObjectOfType<AdvertisementManager>() != null) //If ads arent disabled, then show an ad before loading.
         {
             FindObjectOfType<AdvertisementManager>().OnAdComplete += () => UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
             FindObjectOfType<AdvertisementManager>().LoadAd();

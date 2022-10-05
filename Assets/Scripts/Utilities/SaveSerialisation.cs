@@ -4,6 +4,9 @@ using UnityEngine;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 
+/// <summary>
+/// CLass for serialising and deserialising save data.
+/// </summary>
 public class SaveSerialisation
 {
     // Get instance of the save manager singleton
@@ -18,7 +21,7 @@ public class SaveSerialisation
             return instance;
         }
     }
-    private static SaveSerialisation instance;
+    private static SaveSerialisation instance; // The instance of the save manager
     // Save data
     [System.Serializable]
     public class SaveData
@@ -29,7 +32,7 @@ public class SaveSerialisation
         [SerializeField] public UnitData.SerializedUnitData PartyMonsterC;
     }
 
-    private SaveData saveData;
+    private SaveData saveData; // The save data
 
 
     // Save file path
@@ -72,6 +75,7 @@ public class SaveSerialisation
         }
     }
 
+    // Delete the save file
     public void DeleteSave()
     {
         if (File.Exists(Application.persistentDataPath + "/save.dat"))
@@ -107,6 +111,7 @@ public class SaveSerialisation
         }
     }
 
+    /// Getters and setters for the player's Party.
     public UnitData PartyMonsterA
     {
         get
@@ -143,6 +148,12 @@ public class SaveSerialisation
         }
     }
 
+    /// <summary>
+    ///  Save the players party to the save file.
+    /// </summary>
+    /// <param name="monsterA"></param>
+    /// <param name="monsterB"></param>
+    /// <param name="monsterC"></param>
     public void SaveMonsters(UnitData monsterA, UnitData monsterB, UnitData monsterC)
     {
         PartyMonsterA = monsterA;

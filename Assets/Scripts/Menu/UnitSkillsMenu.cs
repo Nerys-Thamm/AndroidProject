@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+/// <summary>
+/// The skill menu for a unit.
+/// </summary>
 public class UnitSkillsMenu : MonoBehaviour
 {
     // References
@@ -28,6 +31,10 @@ public class UnitSkillsMenu : MonoBehaviour
     // Current skill
     SkillData selectedSkill = null;
 
+    /// <summary>
+    ///  CHeck if the player has entered a valid SP amount.
+    /// </summary>
+    /// <param name="input"></param>
     void ValidateSPInput(string input)
     {
         int sp;
@@ -67,6 +74,9 @@ public class UnitSkillsMenu : MonoBehaviour
         UpdateSkillInfo();
     }
 
+    /// <summary>
+    /// Assign the skill points to the skill.
+    /// </summary>
     void AssignSkillPoints()
     {
         int sp;
@@ -82,6 +92,9 @@ public class UnitSkillsMenu : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Populate the skills list
+    /// </summary>
     void PopulateSkills()
     {
         // Clear list
@@ -99,6 +112,9 @@ public class UnitSkillsMenu : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Update the skill info 
+    /// </summary>
     void UpdateSkillInfo()
     {
         foreach (Transform child in skillUnlockParent)
@@ -130,9 +146,4 @@ public class UnitSkillsMenu : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 }

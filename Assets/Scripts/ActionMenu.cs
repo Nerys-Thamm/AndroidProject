@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+/// <summary>
+/// Cntrols the action menu.
+/// </summary>
 public class ActionMenu : MonoBehaviour
 {
     [SerializeField] BattleUI _battleUI;
@@ -15,9 +18,5 @@ public class ActionMenu : MonoBehaviour
         currentActionText.text = "Current Action: " + text;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
 
-    }
 }

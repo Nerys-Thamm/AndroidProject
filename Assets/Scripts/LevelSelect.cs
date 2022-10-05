@@ -4,21 +4,29 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+/// <summary>
+/// THe level select menu.
+/// </summary>
 public class LevelSelect : MonoBehaviour
 {
-    public GameObject levelButtonPrefab;
-    public Transform levelButtonParent;
-    public int levelInterval = 2;
-    public int levelCount = 20;
-    public BattleLoader battleLoader;
+    public GameObject levelButtonPrefab; // The prefab for the level buttons
+    public Transform levelButtonParent; // The parent for the level buttons
+    public int levelInterval = 2; // The interval between levels
+    public int levelCount = 20; // The number of levels
+    public BattleLoader battleLoader; // The battle loader
 
+    /// <summary>
+    ///  Updates the level select menu.
+    /// </summary>
     public void UpdateLevelButtons()
     {
+        // Clear the level buttons
         foreach (Transform child in levelButtonParent)
         {
             Destroy(child.gameObject);
         }
 
+        // Create the level buttons
         for (int i = 0; i < levelCount; i++)
         {
             GameObject levelButton = Instantiate(levelButtonPrefab, levelButtonParent);
@@ -40,9 +48,4 @@ public class LevelSelect : MonoBehaviour
         UpdateLevelButtons();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 }

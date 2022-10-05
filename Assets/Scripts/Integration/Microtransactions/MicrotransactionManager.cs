@@ -4,42 +4,44 @@ using UnityEngine;
 using UnityEngine.Purchasing;
 using UnityEngine.UI;
 
+/// <summary>
+///  Manages the microtransactions for the game.
+/// </summary>
 public class MicrotransactionManager : MonoBehaviour, IStoreListener
 {
     //Button references
-    public Button removeAdsButton;
+    public Button removeAdsButton;  //Button to remove ads
 
 
     // Start is called before the first frame update
     void Start()
     {
-        if (PlayerPrefs.GetInt("AdsDisabled", 0) == 1)
+        if (PlayerPrefs.GetInt("AdsDisabled", 0) == 1) //If ads are disabled
         {
-            removeAdsButton.interactable = false;
+            removeAdsButton.interactable = false; //Disable the button
         }
         else
         {
-            removeAdsButton.interactable = true;
-            removeAdsButton.onClick.AddListener(() => { BuyRemoveAds(); });
+            removeAdsButton.interactable = true; //Enable the button
+            removeAdsButton.onClick.AddListener(() => { BuyRemoveAds(); }); //Add listener to button
         }
-        if (m_StoreController == null)
+        if (m_StoreController == null) //If the store controller is null
         {
-            InitializePurchasing();
+            InitializePurchasing(); //Initialize the store
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 
     private static IStoreController m_StoreController;          // The Unity Purchasing system.
     private static IExtensionProvider m_StoreExtensionProvider; // The store-specific Purchasing subsystems.
 
-    private static string kProductIDRemoveAds = "remove_ads";
-    private static string kProductIDPurchaseCurrency = "purchase_currency";
+    private static string kProductIDRemoveAds = "remove_ads";  // Product ID to remove ads.
+    private static string kProductIDPurchaseCurrency = "purchase_currency"; //Product ID to purchase currency
 
+    /// <summary>
+    ///  Called when Unity IAP is ready to make purchases.
+    /// </summary>
+    /// <param name="controller"></param>
+    /// <param name="extensions"></param>
     public void OnInitialized(IStoreController controller, IExtensionProvider extensions)
     {
         // Purchasing has succeeded initializing. Collect our Purchasing references.
@@ -51,18 +53,29 @@ public class MicrotransactionManager : MonoBehaviour, IStoreListener
         m_StoreExtensionProvider = extensions;
     }
 
+    /// <summary>
+    ///  Called when Unity IAP encounters an unrecoverable initialization error.
+    /// </summary>
+    /// <param name="error"></param>
     public void OnInitializeFailed(InitializationFailureReason error)
     {
         // Purchasing set-up has not succeeded. Check error for reason. Consider sharing this reason with the user.
         Debug.Log("OnInitializeFailed InitializationFailureReason:" + error);
     }
 
+    /// <summary>
+    ///  Checks if the initializtion of the store has failed.
+    /// </summary>
+    /// <returns></returns>
     private bool IsInitialized()
     {
         // Only say we are initialized if both the Purchasing references are set.
         return m_StoreController != null && m_StoreExtensionProvider != null;
     }
 
+    /// <summary>
+    ///  Initialize Unity IAP. If we are running in the editor, we simulate the store.
+    /// </summary>
     public void InitializePurchasing()
     {
         // If we have already connected to Purchasing ...
@@ -85,6 +98,11 @@ public class MicrotransactionManager : MonoBehaviour, IStoreListener
         UnityPurchasing.Initialize(this, builder);
     }
 
+    /// <summary>
+    ///  Purchase a product asynchronously using its general identifier. Expect a response either
+    /// </summary>
+    /// <param name="purchaseEvent"></param>
+    /// <returns></returns>
     PurchaseProcessingResult IStoreListener.ProcessPurchase(PurchaseEventArgs purchaseEvent)
     {
         if (string.Equals(purchaseEvent.purchasedProduct.definition.id, kProductIDRemoveAds, System.StringComparison.Ordinal))
@@ -109,22 +127,37 @@ public class MicrotransactionManager : MonoBehaviour, IStoreListener
         return PurchaseProcessingResult.Complete;
     }
 
+    /// <summary>
+    ///  Called when a purchase fails.
+    /// </summary>
+    /// <param name="product"></param>
+    /// <param name="failureReason"></param>
     void IStoreListener.OnPurchaseFailed(Product product, PurchaseFailureReason failureReason)
     {
         // A product purchase attempt did not succeed. Check failureReason for more detail. Consider sharing this reason with the user.
         Debug.Log(string.Format("OnPurchaseFailed: FAIL. Product: '{0}', PurchaseFailureReason: {1}", product.definition.storeSpecificId, failureReason));
     }
 
+    /// <summary>
+    ///  Buy the remove ads product using its general identifier. Expect a response either through ProcessPurchase or OnPurchaseFailed asynchronously.
+    /// </summary>
     public void BuyRemoveAds()
     {
         BuyProductID(kProductIDRemoveAds);
     }
 
+    /// <summary>
+    ///  Buy the purchase currency product using its general identifier. Expect a response either through ProcessPurchase or OnPurchaseFailed asynchronously.
+    /// </summary>
     public void BuyCurrency()
     {
         BuyProductID(kProductIDPurchaseCurrency);
     }
 
+    /// <summary>
+    ///  Buy the product with the given product ID.
+    /// </summary>
+    /// <param name="productId"></param>
     void BuyProductID(string productId)
     {
         // If Purchasing has been initialized ...

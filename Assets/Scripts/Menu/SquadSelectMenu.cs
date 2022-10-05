@@ -33,6 +33,10 @@ public class SquadSelectMenu : MonoBehaviour
     // Menu variables
     int selectedUnit = 0;
 
+    /// <summary>
+    ///  Gets the currently selected unit.
+    /// </summary>
+    /// <returns></returns>
     public UnitData GetSelectedUnit()
     {
         switch (selectedUnit)
@@ -101,6 +105,10 @@ public class SquadSelectMenu : MonoBehaviour
 
     }
 
+    /// <summary>
+    ///  Renames the currently selected monster.
+    /// </summary>
+    /// <param name="newName"></param>
     void RenameCurrentMonster(string newName)
     {
         switch (selectedUnit)
@@ -120,12 +128,19 @@ public class SquadSelectMenu : MonoBehaviour
         SaveSerialisation.Instance.Save();
     }
 
+    /// <summary>
+    ///  Saves monsters to the save file.
+    /// </summary>
     public void SaveMonsters()
     {
         SaveSerialisation.Instance.SaveMonsters(SquadAMember, SquadBMember, SquadCMember);
         SaveSerialisation.Instance.Save();
     }
 
+    /// <summary>
+    ///  Swaps the currently selected monster with the given monster.
+    /// </summary>
+    /// <param name="newMonster"></param>
     void SwapCurrentMonster(UnitData newMonster)
     {
         UnitData oldMonster = null;
@@ -163,6 +178,9 @@ public class SquadSelectMenu : MonoBehaviour
 
     }
 
+    /// <summary>
+    ///  Updates the info menu with the currently selected monster.
+    /// </summary>
     public void UpdateInfoMenu()
     {
         SquadA.GetComponentInChildren<Text>().text = SquadAMember?.unitName ?? "Empty";

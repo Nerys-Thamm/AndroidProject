@@ -5,36 +5,58 @@ using System.Linq;
 using Unity.VisualScripting;
 using System;
 
+/// <summary>
+///  Contains data about a skill.
+/// </summary>
 [CreateAssetMenu(fileName = "New Skill", menuName = "GameData/Combat/Create Skill")]
 public class SkillData : ScriptableObject
 {
+    /// <summary>
+    ///  The type of stat that this skill modifies.
+    /// </summary>
     public enum StatType
     {
-        HP,
-        MP,
-        STR,
-        DEF,
-        AGI,
-        INT
+        HP, /// > Hit Points
+        MP, /// > Magic Points
+        STR, /// > Strength
+        DEF, /// > Defense
+        AGI, /// > Agility
+        INT /// > Intelligence
     }
+
+    /// <summary>
+    ///  Unlockable Ability.
+    /// </summary>
     [System.Serializable]
     public struct AbilityUnlock
     {
         [SerializeField] public Ability ability;
         public int unlockRequirement;
     }
+
+    /// <summary>
+    ///  Unlockable ability as a serialized class.
+    /// </summary>
     [System.Serializable]
     public struct SerializedAbilityUnlock
     {
-        [SerializeField] public Ability.SerializedAbility ability;
-        public int unlockRequirement;
+        [SerializeField] public Ability.SerializedAbility ability; // Serialized ability
+        public int unlockRequirement; // SP requirement to unlock
 
+        /// <summary>
+        ///  Creates a serialized ability unlock from an ability unlock.
+        /// </summary>
+        /// <param name="abilityUnlock"></param>
         public SerializedAbilityUnlock(AbilityUnlock abilityUnlock)
         {
             ability = new Ability.SerializedAbility(abilityUnlock.ability);
             unlockRequirement = abilityUnlock.unlockRequirement;
         }
 
+        /// <summary>
+        ///   Creates an ability unlock from a serialized ability unlock.
+        /// </summary>
+        /// <returns></returns>
         public AbilityUnlock Deserialize()
         {
             return new AbilityUnlock
@@ -44,36 +66,51 @@ public class SkillData : ScriptableObject
             };
         }
     }
+
+    /// <summary>
+    ///  A stat boost unlock.
+    /// </summary>
     [System.Serializable]
     public struct StatUnlock
     {
-        public int statPoints;
-        public int unlockRequirement;
-        public StatType statType;
+        public int statPoints; // The amount of points to boost the stat by
+        public int unlockRequirement; // The SP requirement to unlock
+        public StatType statType; // The type of stat to boost
     }
 
     [Header("Skill Info")]
-    [SerializeField] private string _name;
-    [SerializeField] private string _description;
-    public string Name { get { return _name; } }
-    public string Description { get { return _description; } }
+    [SerializeField] private string _name; // The name of the skill
+    [SerializeField] private string _description; // The description of the skill
+    public string Name { get { return _name; } } // The name of the skill
+    public string Description { get { return _description; } } // The description of the skill
 
 
     [Header("Skill Tree")]
-    [SerializeField] private int _skillPoints;
-    public int SkillPoints { get { return _skillPoints; } }
-    [SerializeField] private List<AbilityUnlock> _abilityUnlocks;
-    [SerializeField] private List<StatUnlock> _statUnlocks;
+    [SerializeField] private int _skillPoints; // The amount of skill points invested in this skill
+    public int SkillPoints { get { return _skillPoints; } } // The amount of skill points invested in this skill
+    [SerializeField] private List<AbilityUnlock> _abilityUnlocks; // The list of abilities that can be unlocked
+    [SerializeField] private List<StatUnlock> _statUnlocks; // The list of stat boosts that can be unlocked
+
+    /// <summary>
+    ///  Invests skill points into this skill.
+    /// </summary>
+    /// <param name="points"></param>
     public void InvestPoints(int points)
     {
         _skillPoints += points;
     }
+
+    /// <summary>
+    ///  Resets the skill points invested in this skill.
+    /// </summary>
     public void ResetPoints()
     {
         _skillPoints = 0;
     }
 
-
+    /// <summary>
+    /// Data struct storing info about the contents of a skill for use with UI.
+    /// </summary>
     [System.Serializable]
     public struct UnlockInfo
     {
@@ -83,14 +120,16 @@ public class SkillData : ScriptableObject
         public bool isUnlocked;
     }
 
+    /// <summary>
+    ///  Gets all of the info pertaining to the skill, for use with UI.
+    /// </summary>
+    /// <returns></returns>
     public List<UnlockInfo> GetUnlockInfo()
     {
         List<UnlockInfo> unlocks = new List<UnlockInfo>();
         foreach (AbilityUnlock a in _abilityUnlocks)
         {
-
             unlocks.Add(new UnlockInfo() { unlockRequirement = a.unlockRequirement, unlockName = a.ability.Name, isUnlocked = (a.unlockRequirement <= _skillPoints), unlockDescription = a.ability.Description });
-
         }
         foreach (StatUnlock s in _statUnlocks)
         {
@@ -100,6 +139,10 @@ public class SkillData : ScriptableObject
         return unlocks;
     }
 
+    /// <summary>
+    ///  Gets a list of all currently unlocked abilities.
+    /// </summary>
+    /// <returns></returns>
     public List<Ability> GetUnlockedAbilities()
     {
         List<Ability> abilities = new List<Ability>();
@@ -113,6 +156,9 @@ public class SkillData : ScriptableObject
         return abilities;
     }
 
+    /// <summary>
+    ///  A serialized version of the skill data.
+    /// </summary>
     [System.Serializable]
     public class SerializedSkillData
     {
@@ -122,6 +168,10 @@ public class SkillData : ScriptableObject
         public List<SerializedAbilityUnlock> abilityUnlocks;
         public List<StatUnlock> statUnlocks;
 
+        /// <summary>
+        ///  Creates a serialized version of the skill data.
+        /// </summary>
+        /// <param name="skillData"></param>
         public SerializedSkillData(SkillData skillData)
         {
             name = skillData._name;
@@ -135,6 +185,11 @@ public class SkillData : ScriptableObject
             }
         }
 
+
+        /// <summary>
+        ///  Creates a skill data from a serialized version of the skill data.
+        /// </summary>
+        /// <returns></returns>
         public SkillData GetSkillData()
         {
             SkillData skillData = ScriptableObject.CreateInstance<SkillData>();

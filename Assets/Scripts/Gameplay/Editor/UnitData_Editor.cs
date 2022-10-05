@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+/// <summary>
+///  Custom editor for <see cref="UnitData"/>.
+/// </summary>
 [CustomEditor(typeof(UnitData))]
 public class UnitData_Editor : Editor
 {

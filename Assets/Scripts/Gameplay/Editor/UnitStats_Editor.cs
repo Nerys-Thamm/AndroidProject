@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+/// <summary>
+///  Custom editor for <see cref="UnitStats"/>.
+/// </summary>
 [CustomEditor(typeof(UnitStats))]
 public class UnitStats_Editor : Editor
 {
-
     public override void OnInspectorGUI()
     {
-
-
         UnitStats unitStats = (UnitStats)target;
 
 

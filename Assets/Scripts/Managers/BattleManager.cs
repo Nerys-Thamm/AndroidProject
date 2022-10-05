@@ -3,15 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-
+/// <summary>
+///  Manages the state and flow of battle.
+/// </summary>
 public class BattleManager : MonoBehaviour
 {
+    /// <summary>
+    ///  Utility calculation methods.
+    /// </summary>
     private static class Utilities
     {
+        /// <summary>
+        ///  Calculates the damage dealt by an attack.
+        /// </summary>
+        /// <param name="attacker"></param>
+        /// <param name="defender"></param>
+        /// <returns></returns>
         public static int CalcPhysDamage(UnitStats attacker, UnitStats defender)
         {
-            int dmg = Mathf.FloorToInt(attacker.STR * 0.5f - defender.DEF * 0.25f);
-            dmg = dmg + Random.Range(-dmg / 8, dmg / 8);
+            int dmg = Mathf.FloorToInt(attacker.STR * 0.5f - defender.DEF * 0.25f); // Calculate damage
+            dmg = dmg + Random.Range(-dmg / 8, dmg / 8); // Add random variance
             //If damage is 0 or smaller, set it to 0 or 1 randomly
             if (dmg <= 0)
             {
@@ -20,10 +31,16 @@ public class BattleManager : MonoBehaviour
             return dmg;
         }
 
+        /// <summary>
+        ///  Calculates the damage dealt by a magic attack.
+        /// </summary>
+        /// <param name="attacker"></param>
+        /// <param name="defender"></param>
+        /// <returns></returns>
         public static int CalcMagicDamage(UnitStats attacker, UnitStats defender)
         {
-            int dmg = Mathf.FloorToInt(attacker.INT * 0.5f - defender.DEF * 0.15f);
-            dmg = dmg + Random.Range(-dmg / 8, dmg / 8);
+            int dmg = Mathf.FloorToInt(attacker.INT * 0.5f - defender.DEF * 0.15f); // Calculate damage
+            dmg = dmg + Random.Range(-dmg / 8, dmg / 8); // Add random variance
             //If damage is 0 or smaller, set it to 0 or 1 randomly
             if (dmg <= 0)
             {
@@ -32,10 +49,15 @@ public class BattleManager : MonoBehaviour
             return dmg;
         }
 
+        /// <summary>
+        ///  Calculates the heal amount of a heal.
+        /// </summary>
+        /// <param name="healer"></param>
+        /// <returns></returns>
         public static int CalcHeal(UnitStats healer)
         {
-            int heal = Mathf.FloorToInt(healer.INT * 0.5f);
-            heal = heal + Random.Range(-heal / 8, heal / 8);
+            int heal = Mathf.FloorToInt(healer.INT * 0.5f); // Calculate heal
+            heal = heal + Random.Range(-heal / 8, heal / 8); // Add random variance
             //If heal is 0 or smaller, set it to 0 or 1 randomly
             if (heal <= 0)
             {
@@ -49,50 +71,52 @@ public class BattleManager : MonoBehaviour
     /// <summary>
     ///  Managers and UI Controllers
     /// </summary>
-    public BattleField battleField;
-    public TeamManager teamManager;
-    public BattleDirector battleDirector;
-    public SpeciesData enemyData;
-    public BattleUI battleUI;
-    public WinLoseScreen winLoseScreen;
-    public GameObject gameOverScreen;
+    public BattleField battleField; // Battle field
+    public TeamManager teamManager; // Team manager
+    public BattleDirector battleDirector; // Battle director
+    public SpeciesData enemyData; // Enemy data
+    public BattleUI battleUI; // Battle UI
+    public WinLoseScreen winLoseScreen; // Win/Lose screen
+    public GameObject gameOverScreen; // Game over screen
 
     /// <summary>
     ///  Effects and Sounds
     /// </summary>
 
-    public GameObject hitEffect;
-    public GameObject deathEffect;
-    public AudioController musicController, sfxController;
+    public GameObject hitEffect; // Hit effect
+    public GameObject deathEffect; // Death effect
+    public AudioController musicController, sfxController; // Music and SFX controllers
 
-
+    /// <summary>
+    ///  Struct representing an action to be taken by a unit in battle.
+    /// </summary>
     public struct BattleAction
     {
-        public UnitStats unit;
-        public UnitStats target;
-        public int targetIndex;
-        public int unitIndex;
-        public bool enemy;
-        public Ability ability;
+        public UnitStats unit; // Unit to take action
+        public UnitStats target; // Target of action
+        public int targetIndex; // Index of target
+        public int unitIndex; // Index of unit
+        public bool enemy; // Is the unit an enemy?
+        public Ability ability; // Ability to use
+        /// <summary>
+        ///  Type of action to take.
+        /// </summary>
         public enum ActionType
         {
-            Attack,
-            Ability,
-            Defend
+            Attack, // Attack an enemy
+            Ability, // Use an ability
+            Defend // Defend
         }
         public ActionType actionType;
     }
 
+    List<BattleAction> roundActions = new List<BattleAction>(); // List of actions to take in the current round
+    BattleAction currentAction; // Current action being taken
 
-
-    List<BattleAction> roundActions = new List<BattleAction>();
-    BattleAction currentAction;
-
-    bool currentlyBattling = false;
-    bool win = false;
-    bool readyForNextAction = false;
-
-    float earnedEXP = 0;
+    bool currentlyBattling = false; // Is the battle currently in progress?
+    bool win = false; // Did the player win?
+    bool readyForNextAction = false; // Is the battle ready for the next action?
+    float earnedEXP = 0; // Amount of EXP earned in battle
 
 
     // Start is called before the first frame update
@@ -117,12 +141,18 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    public System.Action OnRoundBegin, OnRoundEnd;
+    public System.Action OnRoundBegin, OnRoundEnd; // Events for round begin and end
 
     ///
     /// Helper Functions for UI
     /// 
 
+    /// <summary>
+    ///  Checks whether a unit is selectable.
+    /// </summary>
+    /// <param name="index"></param>
+    /// <param name="enemy"></param>
+    /// <returns></returns>
     public bool CanSelectUnit(int index, bool enemy)
     {
         if (enemy)
@@ -143,6 +173,10 @@ public class BattleManager : MonoBehaviour
         roundActions.Add(action);
     }
 
+    /// <summary>
+    ///  Chooses a random action for the given unit.
+    /// </summary>
+    /// <param name="unit"></param>
     public void RandomAction(UnitStats unit)
     {
         BattleAction action = new BattleAction();
@@ -175,10 +209,12 @@ public class BattleManager : MonoBehaviour
     /// Battle Sequence
     /// </summary>
 
-
+    /// <summary>
+    ///  Starts the next round of battle.
+    /// </summary>
     public void StartBattle()
     {
-        if (!currentlyBattling)
+        if (!currentlyBattling) //If the battle isnt in progress
         {
             // For each enemy, add a random action
             for (int i = 0; i < battleField.enemyCells.Length; i++)
@@ -197,15 +233,18 @@ public class BattleManager : MonoBehaviour
                     roundActions.Add(battleUI.Actions[i]);
                 }
             }
-            currentlyBattling = true;
-            PrepareRound();
-            LoadNextAction();
+            currentlyBattling = true; // Set battle in progress
+            PrepareRound(); // Prepare the round
+            LoadNextAction(); // Load the next action
             battleUI.SetMainMenuActive(false);
             battleDirector.StartBattle(currentAction);
             musicController.Trigger("Battle");
         }
     }
 
+    /// <summary>
+    ///  Prepares the round.
+    /// </summary>
     void PrepareRound()
     {
         roundActions = roundActions.OrderByDescending(x => x.unit.AGI).ToList();
@@ -222,6 +261,9 @@ public class BattleManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    ///  Resorts actions to account for deaths.
+    /// </summary>
     void ResortActions()
     {
         // Remove all actions from units that are dead
@@ -231,6 +273,9 @@ public class BattleManager : MonoBehaviour
         roundActions.RemoveAll((a) => a.target.CurrHP <= 0);
     }
 
+    /// <summary>
+    ///  Loads the next action in the round.
+    /// </summary>
     void LoadNextAction()
     {
         //Check for win or lose
@@ -264,6 +309,7 @@ public class BattleManager : MonoBehaviour
         }
         else if (win)
         {
+            Social.ReportProgress("CgkIgoby7MoHEAIQAQ", 100.0f, (bool success) => { });
             gameOverScreen.SetActive(true);
             winLoseScreen.Show(true);
             musicController.Trigger("GameOver");
@@ -284,6 +330,7 @@ public class BattleManager : MonoBehaviour
                 winLoseScreen.AddReward(units[i].Name + " gained " + Mathf.CeilToInt(expPerUnit) + " EXP.");
                 if (levelUp)
                 {
+                    Social.ReportProgress("CgkIgoby7MoHEAIQAg", 100.0f, (bool success) => { });
                     winLoseScreen.AddReward(units[i].Name + " leveled up!");
                 }
             }
@@ -311,6 +358,9 @@ public class BattleManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    ///  Applies the effects of an action.
+    /// </summary>
     void ApplyCurrentAction()
     {
         int dmg = 0;
@@ -318,52 +368,54 @@ public class BattleManager : MonoBehaviour
         HitScore hitScore = null;
         switch (currentAction.actionType)
         {
-            case BattleAction.ActionType.Attack:
-                dmg = Utilities.CalcPhysDamage(currentAction.unit, currentAction.target);
-                currentAction.target.TakeDamage(dmg);
-                sfxController.Play("Melee");
-                hitEffectInstance = Instantiate(hitEffect, currentAction.target.transform.position, Quaternion.identity);
-                hitScore = hitEffectInstance.GetComponent<HitScore>();
-                hitScore.SetText(dmg.ToString());
-                hitScore.SetType(HitScore.Type.Damage);
+            case BattleAction.ActionType.Attack: // If the action is an attack
+                dmg = Utilities.CalcPhysDamage(currentAction.unit, currentAction.target); // Calculate the damage
+                currentAction.target.TakeDamage(dmg); // Apply the damage
+                sfxController.Play("Melee"); // Play the melee sound effect
+                hitEffectInstance = Instantiate(hitEffect, currentAction.target.transform.position, Quaternion.identity); // Create the hit effect
+                hitScore = hitEffectInstance.GetComponent<HitScore>(); // Get the hit score component
+                hitScore.SetText(dmg.ToString()); // Set the text
+                hitScore.SetType(HitScore.Type.Damage); // Set the type
                 break;
-            case BattleAction.ActionType.Ability:
+            case BattleAction.ActionType.Ability: // If the action is an ability
                 currentAction.unit.UseMP(currentAction.ability.MPCost);
                 switch (currentAction.ability.Type)
                 {
-                    case Ability.AbilityType.Attack:
-                        if (currentAction.ability.IsMagic)
+                    case Ability.AbilityType.Attack: // If the ability is an attack
+                        if (currentAction.ability.IsMagic) // If it is magical
                         {
-                            dmg = Mathf.FloorToInt(Utilities.CalcMagicDamage(currentAction.unit, currentAction.target) * currentAction.ability.EffectMult);
-                            sfxController.Play("Magic");
+                            dmg = Mathf.FloorToInt(Utilities.CalcMagicDamage(currentAction.unit, currentAction.target) * currentAction.ability.EffectMult); // Calculate the damage
+                            sfxController.Play("Magic"); // Play the magic sound effect
                         }
-                        else
+                        else // Otherwise
                         {
-                            dmg = Mathf.FloorToInt(Utilities.CalcPhysDamage(currentAction.unit, currentAction.target) * currentAction.ability.EffectMult);
-                            sfxController.Play("Melee");
+                            dmg = Mathf.FloorToInt(Utilities.CalcPhysDamage(currentAction.unit, currentAction.target) * currentAction.ability.EffectMult); // Calculate the damage
+                            sfxController.Play("Melee"); // Play the melee sound effect
                         }
-                        currentAction.target.TakeDamage(dmg);
-                        hitEffectInstance = Instantiate(hitEffect, currentAction.target.transform.position, Quaternion.identity);
-                        hitScore = hitEffectInstance.GetComponent<HitScore>();
-                        hitScore.SetText(dmg.ToString());
-                        hitScore.SetType(HitScore.Type.Damage);
-                        currentAction.target.ApplyDebuff(currentAction.ability.Effect);
+                        currentAction.target.TakeDamage(dmg); // Apply the damage
+                        hitEffectInstance = Instantiate(hitEffect, currentAction.target.transform.position, Quaternion.identity); // Create the hit effect
+                        hitScore = hitEffectInstance.GetComponent<HitScore>(); // Get the hit score component
+                        hitScore.SetText(dmg.ToString()); // Set the text
+                        hitScore.SetType(HitScore.Type.Damage); // Set the type
+                        currentAction.target.ApplyDebuff(currentAction.ability.Effect); // Apply the debuff
                         break;
-                    case Ability.AbilityType.Heal:
-                        int heal = Mathf.FloorToInt(Utilities.CalcHeal(currentAction.unit) * currentAction.ability.EffectMult);
-                        currentAction.target.Heal(heal);
-                        hitEffectInstance = Instantiate(hitEffect, currentAction.target.transform.position, Quaternion.identity);
-                        hitScore = hitEffectInstance.GetComponent<HitScore>();
-                        hitScore.SetText(heal.ToString());
-                        hitScore.SetType(HitScore.Type.Heal);
+                    case Ability.AbilityType.Heal: // If the ability is a heal
+                        int heal = Mathf.FloorToInt(Utilities.CalcHeal(currentAction.unit) * currentAction.ability.EffectMult); // Calculate the heal
+                        currentAction.target.Heal(heal); // Apply the heal
+                        hitEffectInstance = Instantiate(hitEffect, currentAction.target.transform.position, Quaternion.identity); // Create the hit effect
+                        hitScore = hitEffectInstance.GetComponent<HitScore>(); // Get the hit score component
+                        hitScore.SetText(heal.ToString()); // Set the text
+                        hitScore.SetType(HitScore.Type.Heal); // Set the type
                         break;
-                    case Ability.AbilityType.Buff:
-                        currentAction.target.ApplyBuff(currentAction.ability.Effect);
+                    case Ability.AbilityType.Buff: // If the ability is a buff
+                        currentAction.target.ApplyBuff(currentAction.ability.Effect); // Apply the buff
                         break;
-                    case Ability.AbilityType.Debuff:
-                        currentAction.target.ApplyDebuff(currentAction.ability.Effect);
+                    case Ability.AbilityType.Debuff: // If the ability is a debuff
+                        currentAction.target.ApplyDebuff(currentAction.ability.Effect); // Apply the debuff
                         break;
                 }
+
+                /// Apply buff and debuff effects
                 if ((currentAction.ability.Effect & Ability.EffectMask.AGI) != 0)
                 {
                     hitEffectInstance = Instantiate(hitEffect, currentAction.target.transform.position, Quaternion.identity);
@@ -405,23 +457,26 @@ public class BattleManager : MonoBehaviour
             {
                 if (currentAction.enemy)
                 {
-                    StartCoroutine(DeathAnimation(currentAction.target.gameObject));
+                    StartCoroutine(DeathAnimation(currentAction.target.gameObject)); // Play the death animation
                     battleUI.SetDead(currentAction.targetIndex, false);
-                    //battleUI.ShowDeath(currentAction.targetIndex, currentAction.enemy);
                 }
                 else
                 {
-                    float xpVal = Mathf.Pow((currentAction.target.Level * 2f), 1.2f);
-                    xpVal += (xpVal / 10f * Random.Range(-1f, 1f));
-                    earnedEXP += xpVal;
-                    StartCoroutine(DeathAnimation(currentAction.target.gameObject));
+                    float xpVal = Mathf.Pow((currentAction.target.Level * 2f), 1.2f); // Calculate the xp value
+                    xpVal += (xpVal / 10f * Random.Range(-1f, 1f)); // Add a random value
+                    earnedEXP += xpVal; // Add the xp value to the earned xp
+                    StartCoroutine(DeathAnimation(currentAction.target.gameObject)); // Play the death animation
                     battleUI.SetDead(currentAction.targetIndex, true);
-                    //battleUI.ShowDeath(currentAction.targetIndex, currentAction.enemy);
                 }
             }
         }
     }
 
+    /// <summary>
+    ///  Plays the death animation
+    /// </summary>
+    /// <param name="unit"></param>
+    /// <returns></returns>
     IEnumerator DeathAnimation(GameObject unit)
     {
         //Place a death effect on the unit, then fade out all materials over time before destroying the death effect and unit
@@ -447,6 +502,9 @@ public class BattleManager : MonoBehaviour
         Destroy(unit, 5f);
     }
 
+    /// <summary>
+    ///  Ends the battle
+    /// </summary>
     void EndRound()
     {
         currentlyBattling = false;
@@ -458,7 +516,9 @@ public class BattleManager : MonoBehaviour
     }
 
 
-
+    /// <summary>
+    ///  Initializes the battle
+    /// </summary>
     void InitialiseBattle()
     {
         // Spawn the player units

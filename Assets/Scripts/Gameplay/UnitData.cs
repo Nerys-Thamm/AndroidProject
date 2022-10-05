@@ -2,17 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+///  UnitData is a data class that holds all the information about a unit.
+/// </summary>
 [CreateAssetMenu(fileName = "UnitData", menuName = "GameData/Unit/Create Unit Data", order = 0)]
 public class UnitData : ScriptableObject
 {
     [Header("Unit Info")]
-    public string unitName;
-    public string unitSpecies;
-    [SerializeField] string _unitID = "";
-    public string UnitID { get { if (_unitID == "") _unitID = System.Guid.NewGuid().ToString(); return _unitID; } private set { _unitID = value; } }
+    public string unitName; /// > The name of the unit.
+    public string unitSpecies; /// > The species of the unit.
+    [SerializeField] string _unitID = ""; /// > The ID of the unit.
+    public string UnitID { get { if (_unitID == "") _unitID = System.Guid.NewGuid().ToString(); return _unitID; } private set { _unitID = value; } } /// > The ID of the unit.
 
     [Header("Unit Attributes")]
-    public Attributes attributes = new Attributes();
+    public Attributes attributes = new Attributes(); /// > The attributes of the unit.
 
     [System.Serializable]
     /// <summary>
@@ -45,7 +48,7 @@ public class UnitData : ScriptableObject
         public float HP_Growth() { return _HP_Growth; }
 
         /// <summary>
-        /// Attribute Get Methods
+        /// Attribute Get Methods (with level)
         /// </summary>
         public int HP(int lvl) { return Mathf.FloorToInt(_HP_Base + ((_HP_Growth) * (lvl - 1))); }
         public int MP(int lvl) { return Mathf.FloorToInt(_MP_Base + ((_MP_Growth) * (lvl - 1))); }
@@ -100,16 +103,31 @@ public class UnitData : ScriptableObject
     public int HP { get { return _HP; } }
     public int MP { get { return _MP; } }
 
+    /// <summary>
+    ///  Deals damage to the unit.
+    /// </summary>
+    /// <param name="dmg"></param>
     public void Damage(int dmg)
     {
         _HP -= dmg;
         if (_HP < 0) _HP = 0;
     }
+
+    /// <summary>
+    ///  Heals the unit.
+    /// </summary>
+    /// <param name="heal"></param>
     public void Heal(int heal)
     {
         _HP += heal;
         if (_HP > attributes.HP(_level)) _HP = attributes.HP(_level);
     }
+
+    /// <summary>
+    ///  Uses MP.
+    /// </summary>
+    /// <param name="mp"></param>
+    /// <returns></returns>
     public bool UseMP(int mp)
     {
         if (_MP >= mp)
@@ -119,6 +137,11 @@ public class UnitData : ScriptableObject
         }
         return false;
     }
+
+    /// <summary>
+    ///  Restores MP.
+    /// </summary>
+    /// <param name="mp"></param>
     public void RestoreMP(int mp)
     {
         _MP += mp;
@@ -126,10 +149,16 @@ public class UnitData : ScriptableObject
     }
 
     [Header("Unit Level")]
-    [SerializeField] private int _level = 1;
-    [SerializeField] private int _currXP = 0;
-    public int Level { get { return _level; } }
-    public int CurrXP { get { return _currXP; } }
+    [SerializeField] private int _level = 1; // Level of the unit
+    [SerializeField] private int _currXP = 0; // Current XP of the unit
+    public int Level { get { return _level; } } // Level of the unit
+    public int CurrXP { get { return _currXP; } } // Current XP of the unit
+
+    /// <summary>
+    ///  Adds XP to the unit.
+    /// </summary>
+    /// <param name="xp"></param>
+    /// <returns></returns>
     public bool AddXP(int xp)
     {
 
@@ -152,19 +181,36 @@ public class UnitData : ScriptableObject
         }
     }
 
+    /// <summary>
+    ///  Test function to add XP to the unit.
+    /// </summary>
+    /// <param name="xp"></param>
     public void XPTestFunc(int xp)
     {
         Debug.Log(AddXP(xp) ? "Level Up!" : "No Level Up");
     }
 
+
     [Header("Global Experience Settings")]
-    public static float XPCurve = 1.5f;
-    public static int firstLevelXP = 3;
-    public static int maxLevel = 100;
+    public static float XPCurve = 1.5f; // The curve of the XP gain
+    public static int firstLevelXP = 3; // The XP needed to reach level 2
+    public static int maxLevel = 100; // The maximum level of the unit
+
+    /// <summary>
+    ///  Returns the XP needed to reach the next level.
+    /// </summary>
+    /// <param name="level"></param>
+    /// <returns></returns>
     public static int NextLevelXP(int level)
     {
         return Mathf.FloorToInt(firstLevelXP * Mathf.Pow(XPCurve, level - 1));
     }
+
+    /// <summary>
+    ///  Returns the SP points gained apon reaching the next level.
+    /// </summary>
+    /// <param name="level"></param>
+    /// <returns></returns>
     public static int SPgain(int level)
     {
         if (level % 2 != 0)
@@ -215,11 +261,19 @@ public class UnitData : ScriptableObject
         }
     }
 
+
     [Header("Unit Skills")]
-    [SerializeField] private List<SkillData> _skills = new List<SkillData>();
-    [SerializeField] private int _skillPoints = 0;
-    public List<SkillData> Skills { get { return _skills; } }
-    public int SkillPoints { get { return _skillPoints; } }
+    [SerializeField] private List<SkillData> _skills = new List<SkillData>(); // List of skills the unit has
+    [SerializeField] private int _skillPoints = 0; // Unassigned Skill points the unit has
+    public List<SkillData> Skills { get { return _skills; } } // List of skills the unit has
+    public int SkillPoints { get { return _skillPoints; } } // Unassigned Skill points the unit has
+
+    /// <summary>
+    ///  Invests unassigned skill points into the given skill.
+    /// </summary>
+    /// <param name="skillIndex"></param>
+    /// <param name="points"></param>
+    /// <returns></returns>
     public bool InvestSkillPoints(int skillIndex, int points)
     {
         if (points <= _skillPoints)
@@ -231,6 +285,10 @@ public class UnitData : ScriptableObject
         return false;
     }
 
+    /// <summary>
+    ///  Gets all the unlocked abilities of the unit.
+    /// </summary>
+    /// <returns></returns>
     public List<Ability> UnlockedAbilities()
     {
         List<Ability> abilities = new List<Ability>();
@@ -260,6 +318,12 @@ public class UnitData : ScriptableObject
         }
     }
 
+
+    /// <summary>
+    ///  Returns a copy of the unit data.
+    /// </summary>
+    /// <param name="baseUnit"></param>
+    /// <returns></returns>
     public static UnitData CreateFromBase(UnitData baseUnit)
     {
         return new UnitData(baseUnit, 1);
@@ -270,20 +334,27 @@ public class UnitData : ScriptableObject
         UnitID = System.Guid.NewGuid().ToString();
     }
 
+    /// <summary>
+    ///  A serializable class for storing the data of a unit.
+    /// </summary>
     [System.Serializable]
     public class SerializedUnitData
     {
-        public string unitName;
-        public string unitSpecies;
-        public string unitID;
-        public Attributes attributes;
-        public int level;
-        public int currXP;
-        public int currHP;
-        public int currMP;
-        public int skillPoints;
-        public List<SkillData.SerializedSkillData> skills = new List<SkillData.SerializedSkillData>();
+        public string unitName; // Name of the unit
+        public string unitSpecies; // Species of the unit
+        public string unitID; // ID of the unit
+        public Attributes attributes; // Attributes of the unit
+        public int level; // Level of the unit
+        public int currXP; // Current XP of the unit
+        public int currHP; // Current HP of the unit
+        public int currMP;  // Current MP of the unit
+        public int skillPoints; // Unassigned Skill points the unit has
+        public List<SkillData.SerializedSkillData> skills = new List<SkillData.SerializedSkillData>(); // List of skills the unit has
 
+        /// <summary>
+        ///  Returns a serialized version of the unit data.
+        /// </summary>
+        /// <param name="unit"></param>
         public SerializedUnitData(UnitData unit)
         {
             unitName = unit.unitName;
@@ -302,6 +373,10 @@ public class UnitData : ScriptableObject
             }
         }
 
+        /// <summary>
+        ///  Returns a deserialized version of the unit data.
+        /// </summary>
+        /// <returns></returns>
         public UnitData Deserialise()
         {
             UnitData unit = new UnitData();

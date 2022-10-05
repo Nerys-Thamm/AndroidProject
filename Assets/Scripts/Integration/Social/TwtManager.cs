@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+///  Manages twitter integration.
+/// </summary>
 public class TwtManager : MonoBehaviour
 {
-    [SerializeField] Button tweetButton;
+    [SerializeField] Button tweetButton; // Button to tweet
     // Start is called before the first frame update
     void Start()
     {
@@ -18,12 +21,15 @@ public class TwtManager : MonoBehaviour
 
     }
 
+    /// <summary>
+    ///  Shares the game on twitter.
+    /// </summary>
     public void Share()
     {
         string twtAddr = "http://twitter.com/intent/tweet";
         string msg = "Try out this cool game!";
-        string descParam = "TestyGame";
-        string urlParam = "https://play.google.com/store/apps/details?id=com.VoyagerSoftworks.AndroidProject";
+        string descParam = "Battle Monsters";
+        string urlParam = "https://play.google.com/store/apps/details?id=com.VoyagerSoftworks.BattleMonsters";
 
         Application.OpenURL(twtAddr + "?text=" + WWW.EscapeURL(msg) + "&url=" + WWW.EscapeURL(urlParam) + "&hashtags=" + WWW.EscapeURL(descParam));
     }

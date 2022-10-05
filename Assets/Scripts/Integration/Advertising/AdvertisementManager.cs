@@ -4,22 +4,25 @@ using UnityEngine;
 using UnityEngine.Advertisements;
 using UnityEngine.UI;
 
+/// <summary>
+///  Manages the display of advertisements.
+/// </summary>
 public class AdvertisementManager : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsShowListener, IUnityAdsInitializationListener
 {
-    private string gameId = "4937169";
-    private bool testMode = false;
+    private string gameId = "4937169"; // Game ID
+    private bool testMode = false; // Whether to use test mode or not
 
-    private string _adUnitId = "Interstitial_Android";
-    private string _rewardedAdUnitId = "Rewarded_Android";
-    private string _bannerAdUnitId = "Banner_Android";
+    private string _adUnitId = "Interstitial_Android"; // ID of the ad unit to display
+    private string _rewardedAdUnitId = "Rewarded_Android"; // ID of the rewarded ad unit to display
+    private string _bannerAdUnitId = "Banner_Android"; // ID of the banner ad unit to display
 
 
-    [SerializeField] Button _showBannerButton, _hideBannerButton, _showInterstitialButton, _showRewardedButton;
+    [SerializeField] Button _showBannerButton, _hideBannerButton, _showInterstitialButton, _showRewardedButton; // Buttons to show and hide the banner and display the interstitial and rewarded ads
 
     void Start()
     {
-        Advertisement.Initialize(gameId, testMode, this);
-        Advertisement.Banner.SetPosition(BannerPosition.BOTTOM_CENTER);
+        Advertisement.Initialize(gameId, testMode, this); // Initialize the ads
+        Advertisement.Banner.SetPosition(BannerPosition.BOTTOM_CENTER); // Set the banner position
         LoadBanner();
     }
 
@@ -88,7 +91,6 @@ public class AdvertisementManager : MonoBehaviour, IUnityAdsLoadListener, IUnity
     // Load content to the Ad Unit:
     public void LoadAd()
     {
-        // IMPORTANT! Only load content AFTER initialization (in this example, initialization is handled in a different script).
         Debug.Log("Loading Ad: " + _adUnitId);
         Advertisement.Load(_adUnitId, this);
     }
@@ -96,7 +98,6 @@ public class AdvertisementManager : MonoBehaviour, IUnityAdsLoadListener, IUnity
     // Show the loaded content in the Ad Unit:
     public void ShowAd()
     {
-        // Note that if the ad content wasn't previously loaded, this method will fail
         Debug.Log("Showing Ad: " + _adUnitId);
         Advertisement.Show(_adUnitId, this);
     }
@@ -104,7 +105,6 @@ public class AdvertisementManager : MonoBehaviour, IUnityAdsLoadListener, IUnity
     // Implement Load Listener and Show Listener interface methods: 
     public void OnUnityAdsAdLoaded(string adUnitId)
     {
-        // Optionally execute code if the Ad Unit successfully loads content.
         Debug.Log("Ad loaded: " + adUnitId);
         ShowAd();
     }
@@ -112,13 +112,11 @@ public class AdvertisementManager : MonoBehaviour, IUnityAdsLoadListener, IUnity
     public void OnUnityAdsFailedToLoad(string adUnitId, UnityAdsLoadError error, string message)
     {
         Debug.Log($"Error loading Ad Unit: {adUnitId} - {error.ToString()} - {message}");
-        // Optionally execute code if the Ad Unit fails to load, such as attempting to try again.
     }
 
     public void OnUnityAdsShowFailure(string adUnitId, UnityAdsShowError error, string message)
     {
         Debug.Log($"Error showing Ad Unit {adUnitId}: {error.ToString()} - {message}");
-        // Optionally execute code if the Ad Unit fails to show, such as loading another ad.
     }
 
     public void OnUnityAdsShowStart(string adUnitId) { }
